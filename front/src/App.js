@@ -3,15 +3,18 @@ import './App.css';
 
 import Messages from './components/Messages';
 import { MessageProvider } from './contexts/messages';
+import { ChakraProvider } from '@chakra-ui/react'
 import AddMessage from './components/Messages/AddMessage';
 
 function App() {
   return (
     <MessageProvider>
-      <div className='App'>
-        <AddMessage />
-        <Messages />
-      </div>
+      <ChakraProvider>
+        <div className='App'>
+          <AddMessage />
+          <Messages />
+        </div>
+      </ChakraProvider>
     </MessageProvider>
   );
 }

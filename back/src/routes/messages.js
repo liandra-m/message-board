@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     );
 });
 
-router.post('/create', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         var message = await Message.create(req.body);
     } catch (error) {

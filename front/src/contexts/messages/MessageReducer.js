@@ -1,5 +1,10 @@
 export default function messageReducer(state, action) {
     switch (action.type) {
+        case 'LIST_MESSAGES':
+            return {
+                ...state,
+                messages: action.payload,
+            };
         case 'ADD_MESSAGE':
             return {
                 ...state,
@@ -7,9 +12,10 @@ export default function messageReducer(state, action) {
             };
         
         case 'EDIT_MESSAGE':
+            console.log(action.payload);
             const updatedMessage = state.messages.map((message) => {
-                if (message.id === action.payload.id) {
-                    return action.payload
+                if (message.id === action.payload[0].id) {
+                    return action.payload[0]
                 }
 
                 return message

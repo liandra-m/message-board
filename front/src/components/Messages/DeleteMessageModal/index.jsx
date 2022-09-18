@@ -9,6 +9,7 @@ import {
   ModalCloseButton,
   Button,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 
 import { MessageContext } from "../../../contexts/messages";
@@ -19,12 +20,28 @@ export default ({ id, title }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { deleteMessage } = useContext(MessageContext);
+  const toast = useToast();
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    deleteMessage(id);
-    onClose()
+    const sucess = deleteMessage(id);
+    if (sucess){
+      toast({
+        title: 'Sucessfully deleted message.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+      onClose()
+    } else {
+      toast({
+        title: 'Failed deleting message.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
   };
 
   return (
@@ -35,14 +52,14 @@ export default ({ id, title }) => {
         <ModalOverlay />
         <form onSubmit={onSubmit}>
           <ModalContent padding="10px">
-            <ModalHeader>Deseja mesmo deletar a mensagem {title}?</ModalHeader>
+            <ModalHeader>Are you sure you want to delete {title}?</ModalHeader>
             <ModalCloseButton />
 
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
+              <Button mr={3} onClick={onClose}>
                 Close
               </Button>
-              <Button colorScheme="red" type="submit">Confirmar</Button>
+              <Button colorScheme="red" type="submit">Confirm</Button>
             </ModalFooter>
           </ModalContent>
         </form>

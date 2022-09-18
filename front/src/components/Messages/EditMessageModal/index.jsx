@@ -14,6 +14,7 @@ import {
   Textarea,
   Input,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 
 import { MessageContext } from "../../../contexts/messages";
@@ -28,6 +29,8 @@ export default ({ id, message }) => {
   const [title, setTitle] = useState(message.title);
   const [body, setBody] = useState(message.body);
 
+  const toast = useToast();
+
   const onSubmit = (e) => {
     e.preventDefault();
 
@@ -36,8 +39,23 @@ export default ({ id, message }) => {
       body,
     };
 
-    editMessage(id, editedMessage);
-    onClose()
+    const sucess = editMessage(id, editedMessage);
+    if (sucess){
+      toast({
+        title: 'Sucessfully edited message.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+      onClose()
+    } else {
+      toast({
+        title: 'Failed editing message.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
   };
 
   return (
@@ -48,7 +66,7 @@ export default ({ id, message }) => {
         <ModalOverlay />
         <form onSubmit={onSubmit}>
           <ModalContent padding="10px">
-            <ModalHeader>Editando mensagem</ModalHeader>
+            <ModalHeader>Editing message</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <FormControl marginTop="1em">
@@ -75,7 +93,7 @@ export default ({ id, message }) => {
               <Button mr={3} onClick={onClose}>
                 Close
               </Button>
-              <Button colorScheme="blue" type="submit">Confirmar</Button>
+              <Button colorScheme="blue" type="submit">Confirm</Button>
             </ModalFooter>
           </ModalContent>
         </form>

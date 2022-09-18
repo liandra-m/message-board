@@ -8,25 +8,48 @@ import {
   Input,
   Textarea,
   Button,
-  Box,
   Container,
-} from '@chakra-ui/react';
+  useToast,
+} from "@chakra-ui/react";
 
 export default () => {
-  const { addMessage, messages } = useContext(MessageContext);
+  const { addMessage } = useContext(MessageContext);
 
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const toast = useToast();
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    setTitle("");
+    setBody("");
 
     const newMessage = {
       title,
       body,
     };
 
-    addMessage(newMessage);
+    const sucess = addMessage(newMessage);
+
+    sucess.then(
+      (data) => {
+        toast({
+          title: "Sucessfully added new message.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      },
+      (error) => {
+        toast({
+          title: "Failed adding new message.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    );
   };
 
   return (
@@ -52,7 +75,7 @@ export default () => {
             />
           </FormControl>
           <FormControl marginTop="1em">
-            <Button type="submit">
+            <Button colorScheme="blue" type="submit">
               Add Message
             </Button>
           </FormControl>

@@ -21,6 +21,9 @@ export default () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    setTitle("");
+    setBody("");
+
     const newMessage = {
       title,
       body,

@@ -25,12 +25,17 @@ export const MessageProvider = ({children}) => {
 
     function addMessage(message) {
         const response = CREATE_MESSAGE(message);
-        if (response) {
-            dispatch({
-                type: 'ADD_MESSAGE',
-                payload: message
-            });
-        }
+        response.then(
+            data => {
+                dispatch({
+                    type: 'ADD_MESSAGE',
+                    payload: data
+                });
+            },
+            error => {
+                console.log(error);
+            }
+        )
     };
 
     function editMessage(id, message) {

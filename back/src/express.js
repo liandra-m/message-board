@@ -1,21 +1,24 @@
-const express = require('express');
-const messagesRoutes = require('./routes/messages');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 
-const startServer = () => {    
-    const app = express();
-    const port = process.env.APP_PORT;
+const messageRoutes = require("./routes/messages");
+const authRoutes = require("./routes/auth");
 
-    const jsonParser = bodyParser.json();
-    app.use(jsonParser);
+const startServer = () => {
+  const app = express();
+  const port = process.env.APP_PORT;
 
-    app.use(messagesRoutes);
+  const jsonParser = bodyParser.json();
+  app.use(jsonParser);
 
-    app.listen(port, () => {
-        console.log(`Server listening on port ${port}`);
-    });
+  app.use(messageRoutes);
+  app.use(authRoutes);
+
+  app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+  });
 };
 
 module.exports = {
-    startServer
-}
+  startServer,
+};

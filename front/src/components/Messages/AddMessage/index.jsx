@@ -10,6 +10,8 @@ import {
   Button,
   Container,
   useToast,
+  VStack,
+  Center,
 } from "@chakra-ui/react";
 
 export default () => {
@@ -53,9 +55,9 @@ export default () => {
   };
 
   return (
-    <React.Fragment>
-      <Container>
-        <form onSubmit={onSubmit}>
+    <Center>
+      <form onSubmit={onSubmit}>
+        <VStack spacing="24px">
           <FormControl marginTop="1em">
             <FormLabel>Title</FormLabel>
             <Input
@@ -79,8 +81,8 @@ export default () => {
               Add Message
             </Button>
           </FormControl>
-        </form>
-      </Container>
-    </React.Fragment>
+        </VStack>
+      </form>
+    </Center>
   );
 };

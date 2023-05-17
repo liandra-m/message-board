@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const authMiddleware = require("./middlewares/auth");
 const messageRoutes = require("./routes/messages");
 const authRoutes = require("./routes/auth");
 
@@ -10,6 +11,8 @@ const startServer = () => {
 
   const jsonParser = bodyParser.json();
   app.use(jsonParser);
+
+  app.use(authMiddleware);
 
   app.use(messageRoutes);
   app.use(authRoutes);

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const verifyJWTToken = (req, res, next) => {
-  const publicRoutes = ["/login"];
+  const publicRoutes = ["/login", "/me"];
   if (publicRoutes.includes(req.originalUrl)) return next();
 
   const token = req.headers["authorization"]?.replace("Bearer ", "");

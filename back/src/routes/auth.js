@@ -11,7 +11,8 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ where: { email: email } });
     const validPassword = await bcrypt.compare(password, user?.password || "");
 
-    if (!user || !validPassword) return res.status(401).send("Invalid credentials");
+    if (!user || !validPassword)
+      return res.status(401).send("Invalid credentials");
 
     const token = generateJWTToken(user);
 
@@ -44,15 +45,24 @@ router.post("/register", async (req, res) => {
   }
 });
 
+router.post("/me", async (req, res) => {
+  try {
+    const token = req.headers["authorization"]?.replace("Bearer ", "");
+
+    return res.status(200).send(jwt.decode(token));
+  } catch (error) {
+    return res.status(500).send("An error has occurred!");
+  }
+});
+
 const generateJWTToken = (user) => {
   return jwt.sign(
-    { id: user?.id, email: user?.email, date: Date() },
+    { id: user?.id, email: user?.email, name: user?.name },
     process.env.JWT_SECRET_KEY,
     {
       expiresIn: "1h",
     }
   );
 };
-
 
 module.exports = router;

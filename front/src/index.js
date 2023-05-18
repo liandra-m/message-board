@@ -6,6 +6,7 @@ import {
   createBrowserRouter,
   redirect,
   RouterProvider,
+  useLocation,
 } from "react-router-dom";
 import Login from "./views/Auth/Login";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -13,23 +14,28 @@ import Messages from "./views/Messages";
 import { MessageProvider } from "./contexts/messages";
 import ErrorBoundary from "./views/Errors/ErrorBoundary";
 import { AuthProvider } from "./contexts/auth";
+import { ME } from "./services/auth";
 
-const authHandler = async () => {
-  const user = true;
-  if (!user) return redirect("/login");
+const authHandler = async (req) => {
+  const url = `/${req?.request?.url?.split("/").pop()}`;
+  const user = await ME();
+
+  if (!user && url !== "/login") return redirect("/login");
+  if (user && url === "/login") return redirect("/messages");
+
   return null;
 };
 
 const router = createBrowserRouter([
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
     path: "/",
     loader: authHandler,
     errorElement: <ErrorBoundary />,
     children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
       {
         path: "/messages",
         element: <Messages />,

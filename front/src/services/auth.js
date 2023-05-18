@@ -5,4 +5,9 @@ const LOGIN = async (payload) => {
   return data;
 };
 
-export { LOGIN };
+const ME = async () => {
+  const { data } = await api.post("/me");
+  return data;
+};
+
+export { LOGIN, ME };

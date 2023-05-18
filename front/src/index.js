@@ -7,10 +7,12 @@ import {
   redirect,
   RouterProvider,
 } from "react-router-dom";
-import Login from "./components/Auth/Login";
+import Login from "./views/Auth/Login";
 import { ChakraProvider } from "@chakra-ui/react";
-import Messages from "./components/Messages";
+import Messages from "./views/Messages";
 import { MessageProvider } from "./contexts/messages";
+import ErrorBoundary from "./views/Errors/ErrorBoundary";
+import { AuthProvider } from "./contexts/auth";
 
 const authHandler = async () => {
   const user = true;
@@ -26,6 +28,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     loader: authHandler,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: "/messages",
@@ -39,9 +42,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <MessageProvider>
-        <RouterProvider router={router} />
-      </MessageProvider>
+      <AuthProvider>
+        <MessageProvider>
+          <RouterProvider router={router} />
+        </MessageProvider>
+      </AuthProvider>
     </ChakraProvider>
   </React.StrictMode>
 );

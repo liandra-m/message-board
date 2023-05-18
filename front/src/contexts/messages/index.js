@@ -6,7 +6,7 @@ import {
   EDIT_MESSAGE,
 } from "../../services/messages";
 
-import messageReducer from "./MessageReducer";
+import messageReducer from "./reducer";
 
 export const MessageContext = createContext();
 
@@ -29,7 +29,7 @@ export const MessageProvider = ({ children }) => {
       }
     );
 
-    return status
+    return status;
   }
 
   async function addMessage(message) {

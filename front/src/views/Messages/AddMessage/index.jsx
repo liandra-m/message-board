@@ -8,7 +8,6 @@ import {
   Input,
   Textarea,
   Button,
-  Container,
   useToast,
   VStack,
   Center,
@@ -32,9 +31,9 @@ export default () => {
       body,
     };
 
-    const sucess = addMessage(newMessage);
+    const success = addMessage(newMessage);
 
-    sucess.then(
+    success.then(
       (data) => {
         toast({
           title: "Sucessfully added new message.",

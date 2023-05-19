@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
-
-import { MessageContext } from "../../../contexts/messages";
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   FormControl,
@@ -11,27 +11,28 @@ import {
   useToast,
   VStack,
   Center,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+
+import { MessageContext } from "contexts/messages";
+import { messageSchema } from "../validationRules";
 
 export default () => {
   const { addMessage } = useContext(MessageContext);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(messageSchema),
+  });
 
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
   const toast = useToast();
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    setTitle("");
-    setBody("");
-
-    const newMessage = {
-      title,
-      body,
-    };
-
-    const success = addMessage(newMessage);
+  const onSubmit = (data) => {
+    const success = addMessage(data);
 
     success.then(
       (data) => {
@@ -41,6 +42,7 @@ export default () => {
           duration: 5000,
           isClosable: true,
         });
+        reset();
       },
       (error) => {
         toast({
@@ -55,25 +57,26 @@ export default () => {
 
   return (
     <Center>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing="24px">
-          <FormControl marginTop="1em">
+          <FormControl marginTop="1em" isInvalid={errors?.title}>
             <FormLabel>Title</FormLabel>
             <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              {...register("title")}
               type="text"
               placeholder="This is a title"
+              maxLength={255}
             />
+            <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl marginTop="1em">
+          <FormControl marginTop="1em" isInvalid={errors?.body}>
             <FormLabel>Content</FormLabel>
             <Textarea
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
+              {...register("body")}
               type="text"
               placeholder="Lorem ipsum..."
             />
+            <FormErrorMessage>{errors?.body?.message}</FormErrorMessage>
           </FormControl>
           <FormControl marginTop="1em">
             <Button colorScheme="blue" type="submit">

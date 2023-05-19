@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 
-import { MessageContext } from "../../contexts/messages";
+import { MessageContext } from "contexts/messages";
 import EditMessageModal from "./EditMessageModal";
 
 import {
@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import DeleteMessageModal from "./DeleteMessageModal";
 import AddMessage from "./AddMessage";
-import NavBar from "../../components/NavBar";
+import NavBar from "components/NavBar";
 
 export default () => {
   const { listMessages, messages } = useContext(MessageContext);

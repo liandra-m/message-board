@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   Center,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   IconButton,
   Input,
@@ -14,39 +15,41 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { AuthContext } from "../../contexts/auth";
+
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+import { AuthContext } from "contexts/auth";
+import { userSchema } from "../validationRules";
 
 export default () => {
-  const { login } = useContext(AuthContext);
+  const { signup } = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(userSchema),
+  });
+
   const [passwordVisibility, setVibility] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const toast = useToast();
   const navigate = useNavigate();
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-    setEmail("");
-    setPassword("");
-
-    const credentials = {
-      email: email,
-      password: password,
-    };
-
-    const success = await login(credentials);
+  const onSubmit = async (data) => {
+    const success = await signup(data);
 
     if (!success)
       return toast({
-        title: "Failed to login.",
+        title: "Failed to register.",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
 
     toast({
-      title: "Successfully logged in.",
+      title: "Successfully registered.",
       status: "success",
       duration: 5000,
       isClosable: true,
@@ -57,25 +60,35 @@ export default () => {
 
   return (
     <Center align="center" justify="center" bg="blue.600" h="100vh">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <VStack borderRadius="12px" bg="white" padding="5em" spacing="24px">
-          <FormControl>
+          <FormControl isInvalid={errors?.name}>
+            <FormLabel>Name</FormLabel>
+            <Input
+              {...register("name")}
+              placeholder="Kate Libby"
+              maxLength={255}
+            />
+            <FormErrorMessage>{errors?.name?.message}</FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={errors?.email}>
             <FormLabel>Email</FormLabel>
             <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
               placeholder="acidburn@ghack.com"
+              maxLength={255}
             />
+            <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={errors?.password}>
             <FormLabel>Password</FormLabel>
             <Flex>
               <Input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register("password")}
                 type={passwordVisibility ? "text" : "password"}
                 borderRightRadius={0}
                 placeholder="*********"
+                maxLength={255}
               />
               <IconButton
                 onClick={() => setVibility(!passwordVisibility)}
@@ -83,11 +96,12 @@ export default () => {
                 borderLeftRadius={0}
               />
             </Flex>
+            <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
           </FormControl>
 
           <Input
             type="submit"
-            value="Login"
+            value="signUp"
             color="white"
             bg="blue.600"
             transition=".25s ease"
@@ -95,12 +109,12 @@ export default () => {
           />
 
           <Link
-            href="/register"
+            href="/login"
             color="gray.600"
             transition=".25s ease"
             _hover={{ color: "gray.700" }}
           >
-            Don't have an account? Click here
+            Already have an account? Click here
           </Link>
         </VStack>
       </form>

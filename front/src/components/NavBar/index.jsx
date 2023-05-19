@@ -1,7 +1,7 @@
 import { Box, Flex, Text, useToast } from "@chakra-ui/react";
 import { useContext } from "react";
 import { FaUserAlt, FaArrowAltCircleRight, FaUser } from "react-icons/fa";
-import { AuthContext } from "../../contexts/auth";
+import { AuthContext } from "contexts/auth";
 import { useNavigate } from "react-router";
 
 export default () => {

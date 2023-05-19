@@ -17,8 +17,9 @@ import {
 import { AuthContext } from "../../contexts/auth";
 
 export default () => {
-  const { login } = useContext(AuthContext);
+  const { register } = useContext(AuthContext);
   const [passwordVisibility, setVibility] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toast = useToast();
@@ -27,26 +28,28 @@ export default () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
+    setName("");
     setEmail("");
     setPassword("");
 
-    const credentials = {
+    const data = {
+      name: name,
       email: email,
       password: password,
     };
 
-    const success = await login(credentials);
+    const success = await register(data);
 
     if (!success)
       return toast({
-        title: "Failed to login.",
+        title: "Failed to register.",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
 
     toast({
-      title: "Successfully logged in.",
+      title: "Successfully registered.",
       status: "success",
       duration: 5000,
       isClosable: true,
@@ -59,6 +62,14 @@ export default () => {
     <Center align="center" justify="center" bg="blue.600" h="100vh">
       <form onSubmit={onSubmit}>
         <VStack borderRadius="12px" bg="white" padding="5em" spacing="24px">
+          <FormControl>
+            <FormLabel>Name</FormLabel>
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Kate Libby"
+            />
+          </FormControl>
           <FormControl>
             <FormLabel>Email</FormLabel>
             <Input
@@ -87,7 +98,7 @@ export default () => {
 
           <Input
             type="submit"
-            value="Login"
+            value="Register"
             color="white"
             bg="blue.600"
             transition=".25s ease"
@@ -95,12 +106,12 @@ export default () => {
           />
 
           <Link
-            href="/register"
+            href="/login"
             color="gray.600"
             transition=".25s ease"
             _hover={{ color: "gray.700" }}
           >
-            Don't have an account? Click here
+            Already have an account? Click here
           </Link>
         </VStack>
       </form>

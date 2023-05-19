@@ -8,4 +8,15 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use(
+  function (request) {
+    request.headers.authorization =
+      "Bearer " + window.localStorage.getItem("token") || null;
+    return request;
+  },
+  function (error) {
+    console.log(error);
+  }
+);
+
 export default api;

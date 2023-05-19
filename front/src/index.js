@@ -15,13 +15,14 @@ import { MessageProvider } from "./contexts/messages";
 import ErrorBoundary from "./views/Errors/ErrorBoundary";
 import { AuthProvider } from "./contexts/auth";
 import { ME } from "./services/auth";
+import Register from "./views/Auth/Register";
 
 const authHandler = async (req) => {
   const url = `/${req?.request?.url?.split("/").pop()}`;
   const user = await ME();
 
-  if (!user && url !== "/login") return redirect("/login");
-  if (user && url === "/login") return redirect("/messages");
+  if ((user && (url === "/login" || url === "/register")) || url === "/")
+    return redirect("/messages");
 
   return null;
 };
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
     loader: authHandler,
     errorElement: <ErrorBoundary />,
     children: [
+      {
+        path: "/register",
+        element: <Register />,
+      },
       {
         path: "/login",
         element: <Login />,

@@ -1,5 +1,10 @@
 import api from "./api";
 
+const REGISTER = async (payload) => {
+  const { data } = await api.post("/register", payload);
+  return data;
+};
+
 const LOGIN = async (payload) => {
   const { data } = await api.post("/login", payload);
   return data;
@@ -10,4 +15,4 @@ const ME = async () => {
   return data;
 };
 
-export { LOGIN, ME };
+export { REGISTER, LOGIN, ME };

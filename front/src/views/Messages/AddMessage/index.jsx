@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   FormControl,
@@ -10,17 +11,23 @@ import {
   useToast,
   VStack,
   Center,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 import { MessageContext } from "contexts/messages";
+import { messageSchema } from "../validationRules";
 
 export default () => {
   const { addMessage } = useContext(MessageContext);
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(messageSchema),
+  });
 
   const toast = useToast();
 
@@ -35,6 +42,7 @@ export default () => {
           duration: 5000,
           isClosable: true,
         });
+        reset();
       },
       (error) => {
         toast({
@@ -51,21 +59,24 @@ export default () => {
     <Center>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing="24px">
-          <FormControl marginTop="1em">
+          <FormControl marginTop="1em" isInvalid={errors?.title}>
             <FormLabel>Title</FormLabel>
             <Input
               {...register("title")}
               type="text"
               placeholder="This is a title"
+              maxLength={255}
             />
+            <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl marginTop="1em">
+          <FormControl marginTop="1em" isInvalid={errors?.body}>
             <FormLabel>Content</FormLabel>
             <Textarea
-              {...register("content")}
+              {...register("body")}
               type="text"
               placeholder="Lorem ipsum..."
             />
+            <FormErrorMessage>{errors?.body?.message}</FormErrorMessage>
           </FormControl>
           <FormControl marginTop="1em">
             <Button colorScheme="blue" type="submit">

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   Modal,
@@ -12,6 +13,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Textarea,
   Input,
   useDisclosure,
@@ -21,6 +23,7 @@ import {
 import { EditIcon } from "@chakra-ui/icons";
 
 import { MessageContext } from "contexts/messages";
+import { messageSchema } from "../validationRules";
 
 export default ({ id, message }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,9 +31,13 @@ export default ({ id, message }) => {
   const { editMessage } = useContext(MessageContext);
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(messageSchema),
+  });
 
   const toast = useToast();
 
@@ -43,6 +50,7 @@ export default ({ id, message }) => {
         duration: 5000,
         isClosable: true,
       });
+      reset();
       onClose();
     } else {
       toast({
@@ -69,22 +77,25 @@ export default ({ id, message }) => {
             <ModalHeader>Editing message</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <FormControl marginTop="1em">
+              <FormControl marginTop="1em" isInvalid={errors?.title}>
                 <FormLabel>Title</FormLabel>
                 <Input
                   {...register("title")}
                   type="text"
                   placeholder="This is a title"
+                  maxLength={255}
                 />
+                <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl marginTop="1em">
+              <FormControl marginTop="1em" isInvalid={errors?.body}>
                 <FormLabel>Content</FormLabel>
                 <Textarea
-                  {...register("content")}
+                  {...register("body")}
                   type="text"
                   placeholder="Lorem ipsum..."
                 />
               </FormControl>
+              <FormErrorMessage>{errors?.body?.message}</FormErrorMessage>
             </ModalBody>
 
             <ModalFooter>

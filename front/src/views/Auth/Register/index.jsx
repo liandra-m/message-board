@@ -1,11 +1,13 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import {
   Center,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   IconButton,
   Input,
@@ -17,6 +19,7 @@ import {
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { AuthContext } from "contexts/auth";
+import { userSchema } from "../validationRules";
 
 export default () => {
   const { signup } = useContext(AuthContext);
@@ -24,7 +27,10 @@ export default () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(userSchema),
+  });
 
   const [passwordVisibility, setVibility] = useState(false);
 
@@ -56,15 +62,25 @@ export default () => {
     <Center align="center" justify="center" bg="blue.600" h="100vh">
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack borderRadius="12px" bg="white" padding="5em" spacing="24px">
-          <FormControl>
+          <FormControl isInvalid={errors?.name}>
             <FormLabel>Name</FormLabel>
-            <Input {...register("name")} placeholder="Kate Libby" />
+            <Input
+              {...register("name")}
+              placeholder="Kate Libby"
+              maxLength={255}
+            />
+            <FormErrorMessage>{errors?.name?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={errors?.email}>
             <FormLabel>Email</FormLabel>
-            <Input {...register("email")} placeholder="acidburn@ghack.com" />
+            <Input
+              {...register("email")}
+              placeholder="acidburn@ghack.com"
+              maxLength={255}
+            />
+            <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={errors?.password}>
             <FormLabel>Password</FormLabel>
             <Flex>
               <Input
@@ -72,6 +88,7 @@ export default () => {
                 type={passwordVisibility ? "text" : "password"}
                 borderRightRadius={0}
                 placeholder="*********"
+                maxLength={255}
               />
               <IconButton
                 onClick={() => setVibility(!passwordVisibility)}
@@ -79,6 +96,7 @@ export default () => {
                 borderLeftRadius={0}
               />
             </Flex>
+            <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
           </FormControl>
 
           <Input

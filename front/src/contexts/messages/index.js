@@ -4,7 +4,7 @@ import {
   CREATE_MESSAGE,
   DELETE_MESSAGE,
   EDIT_MESSAGE,
-} from "../../services/messages";
+} from "services/messages";
 
 import messageReducer from "./reducer";
 

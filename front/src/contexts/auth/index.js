@@ -1,5 +1,5 @@
 import { createContext, useReducer } from "react";
-import { LOGIN, REGISTER } from "../../services/auth";
+import { LOGIN, REGISTER } from "services/auth";
 import authReducer from "./reducer";
 
 export const AuthContext = createContext();

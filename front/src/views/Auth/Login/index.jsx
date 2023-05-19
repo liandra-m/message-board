@@ -14,12 +14,11 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { AuthContext } from "../../contexts/auth";
+import { AuthContext } from "contexts/auth";
 
 export default () => {
-  const { register } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const [passwordVisibility, setVibility] = useState(false);
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toast = useToast();
@@ -28,28 +27,26 @@ export default () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    setName("");
     setEmail("");
     setPassword("");
 
-    const data = {
-      name: name,
+    const credentials = {
       email: email,
       password: password,
     };
 
-    const success = await register(data);
+    const success = await login(credentials);
 
     if (!success)
       return toast({
-        title: "Failed to register.",
+        title: "Failed to login.",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
 
     toast({
-      title: "Successfully registered.",
+      title: "Successfully logged in.",
       status: "success",
       duration: 5000,
       isClosable: true,
@@ -62,14 +59,6 @@ export default () => {
     <Center align="center" justify="center" bg="blue.600" h="100vh">
       <form onSubmit={onSubmit}>
         <VStack borderRadius="12px" bg="white" padding="5em" spacing="24px">
-          <FormControl>
-            <FormLabel>Name</FormLabel>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Kate Libby"
-            />
-          </FormControl>
           <FormControl>
             <FormLabel>Email</FormLabel>
             <Input
@@ -98,7 +87,7 @@ export default () => {
 
           <Input
             type="submit"
-            value="Register"
+            value="Login"
             color="white"
             bg="blue.600"
             transition=".25s ease"
@@ -106,12 +95,12 @@ export default () => {
           />
 
           <Link
-            href="/login"
+            href="/register"
             color="gray.600"
             transition=".25s ease"
             _hover={{ color: "gray.700" }}
           >
-            Already have an account? Click here
+            Don't have an account? Click here
           </Link>
         </VStack>
       </form>

@@ -1,5 +1,5 @@
 import { useRouteError } from "react-router";
-import Error from "./ErrorScreen/Error";
+import Error from "./Error";
 import { useEffect, useState } from "react";
 
 export default () => {

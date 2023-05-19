@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 
-import { MessageContext } from "../../../contexts/messages";
+import { MessageContext } from "contexts/messages";
 
 import {
   FormControl,

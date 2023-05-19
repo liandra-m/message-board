@@ -24,7 +24,7 @@ const sync = async () => {
         const response = await sequelize.sync({alter: true});
         console.log('Sucessfully synced database models');
     } catch (error) {
-        console.error(`An error ocurred while trying to sync database ${error}`);
+        console.error(`An error occurred while trying to sync database ${error}`);
     }
 }
 

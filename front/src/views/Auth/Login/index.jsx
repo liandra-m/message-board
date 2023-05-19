@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useForm } from "react-hook-form";
 
 import {
   Center,
@@ -14,27 +13,25 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
+
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 import { AuthContext } from "contexts/auth";
 
 export default () => {
   const { login } = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const [passwordVisibility, setVibility] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const toast = useToast();
   const navigate = useNavigate();
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-    setEmail("");
-    setPassword("");
-
-    const credentials = {
-      email: email,
-      password: password,
-    };
-
+  const onSubmit = async (credentials) => {
     const success = await login(credentials);
 
     if (!success)
@@ -57,22 +54,17 @@ export default () => {
 
   return (
     <Center align="center" justify="center" bg="blue.600" h="100vh">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <VStack borderRadius="12px" bg="white" padding="5em" spacing="24px">
           <FormControl>
             <FormLabel>Email</FormLabel>
-            <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="acidburn@ghack.com"
-            />
+            <Input {...register("email")} placeholder="acidburn@ghack.com" />
           </FormControl>
           <FormControl>
             <FormLabel>Password</FormLabel>
             <Flex>
               <Input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register("password")}
                 type={passwordVisibility ? "text" : "password"}
                 borderRightRadius={0}
                 placeholder="*********"

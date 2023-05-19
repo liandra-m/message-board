@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
-
-import { MessageContext } from "contexts/messages";
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
 
 import {
   FormControl,
@@ -13,25 +12,20 @@ import {
   Center,
 } from "@chakra-ui/react";
 
+import { MessageContext } from "contexts/messages";
+
 export default () => {
   const { addMessage } = useContext(MessageContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
   const toast = useToast();
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    setTitle("");
-    setBody("");
-
-    const newMessage = {
-      title,
-      body,
-    };
-
-    const success = addMessage(newMessage);
+  const onSubmit = (data) => {
+    const success = addMessage(data);
 
     success.then(
       (data) => {
@@ -55,13 +49,12 @@ export default () => {
 
   return (
     <Center>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing="24px">
           <FormControl marginTop="1em">
             <FormLabel>Title</FormLabel>
             <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              {...register("title")}
               type="text"
               placeholder="This is a title"
             />
@@ -69,8 +62,7 @@ export default () => {
           <FormControl marginTop="1em">
             <FormLabel>Content</FormLabel>
             <Textarea
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
+              {...register("content")}
               type="text"
               placeholder="Lorem ipsum..."
             />

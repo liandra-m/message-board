@@ -12,21 +12,22 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-import { MessageContext } from "contexts/messages";
-
 import { DeleteIcon } from "@chakra-ui/icons";
+
+import { MessageContext } from "contexts/messages";
 
 export default ({ id, title }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { deleteMessage } = useContext(MessageContext);
+
   const toast = useToast();
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const sucess = deleteMessage(id);
-    if (sucess) {
+    const success = deleteMessage(id);
+    if (success) {
       toast({
         title: "Sucessfully deleted message.",
         status: "success",

@@ -3,8 +3,17 @@ import React, { useState, useContext } from "react";
 import { MessageContext } from "../../contexts/messages";
 import EditMessageModal from "./EditMessageModal";
 
-import { Container, Text, Heading, Box, SkeletonText } from "@chakra-ui/react";
+import {
+  Text,
+  Heading,
+  Box,
+  SkeletonText,
+  Center,
+  Flex,
+} from "@chakra-ui/react";
 import DeleteMessageModal from "./DeleteMessageModal";
+import AddMessage from "./AddMessage";
+import NavBar from "../../components/NavBar";
 
 export default () => {
   const { listMessages, messages } = useContext(MessageContext);
@@ -25,8 +34,10 @@ export default () => {
   }, []);
 
   return (
-    <React.Fragment>
-      <Container>
+    <>
+      <NavBar />
+      <Flex direction="column" align="center" justify="center">
+        <AddMessage />
         {loading ? (
           <Box padding="6" boxShadow="lg" bg="white">
             <SkeletonText mt="4" noOfLines={4} spacing="4" />
@@ -65,15 +76,11 @@ export default () => {
         ) : (
           <Box>
             <Text marginTop="1em">
-            {isFailed ? (
-              "Error listing messages"
-            ) : (
-              "No messages to show"
-            )}
+              {isFailed ? "Error listing messages" : "No messages to show"}
             </Text>
           </Box>
         )}
-      </Container>
-    </React.Fragment>
+      </Flex>
+    </>
   );
 };

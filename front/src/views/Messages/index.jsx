@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 
-import { MessageContext } from "contexts/messages";
 import EditMessageModal from "./EditMessageModal";
 
 import {
@@ -14,24 +13,10 @@ import {
 import DeleteMessageModal from "./DeleteMessageModal";
 import AddMessage from "./AddMessage";
 import NavBar from "components/NavBar";
+import { useMessages } from "hooks/messages";
 
 export default () => {
-  const { listMessages, messages } = useContext(MessageContext);
-  const [loading, setLoading] = useState(true);
-  const [isFailed, setFailed] = useState(false);
-
-  React.useEffect(() => {
-    const sucess = listMessages();
-    sucess.then(
-      (data) => {
-        return null;
-      },
-      (error) => {
-        setFailed(true);
-      }
-    );
-    setLoading(false);
-  }, []);
+  const { messages, loading, failed } = useMessages();
 
   return (
     <>
@@ -76,7 +61,7 @@ export default () => {
         ) : (
           <Box>
             <Text marginTop="1em">
-              {isFailed ? "Error listing messages" : "No messages to show"}
+              {failed ? "Error listing messages" : "No messages to show"}
             </Text>
           </Box>
         )}

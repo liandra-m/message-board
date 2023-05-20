@@ -11,9 +11,9 @@ import {
 import Login from "views/Auth/Login";
 import { ChakraProvider } from "@chakra-ui/react";
 import Messages from "views/Messages";
-import { MessageProvider } from "contexts/messages";
+import { MessageProvider } from "hooks/messages";
 import ErrorBoundary from "views/Errors/ErrorBoundary";
-import { AuthProvider } from "contexts/auth";
+import { AuthProvider } from "hooks/auth";
 import { ME } from "services/auth";
 import Register from "views/Auth/Register";
 
@@ -43,7 +43,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/messages",
-        element: <Messages />,
+        element: (
+          <MessageProvider>
+            <Messages />
+          </MessageProvider>
+        ),
       },
     ],
   },
@@ -54,9 +58,7 @@ root.render(
   <React.StrictMode>
     <ChakraProvider>
       <AuthProvider>
-        <MessageProvider>
-          <RouterProvider router={router} />
-        </MessageProvider>
+        <RouterProvider router={router} />
       </AuthProvider>
     </ChakraProvider>
   </React.StrictMode>

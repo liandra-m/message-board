@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -18,11 +18,10 @@ import {
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-import { AuthContext } from "contexts/auth";
 import { userSchema } from "../validationRules";
+import { useSignup } from "hooks/auth";
 
 export default () => {
-  const { signup } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -32,30 +31,33 @@ export default () => {
     resolver: yupResolver(userSchema),
   });
 
-  const [passwordVisibility, setVibility] = useState(false);
-
   const toast = useToast();
   const navigate = useNavigate();
 
+  const [passwordVisibility, setVibility] = useState(false);
+
+  const signup = useSignup();
+
   const onSubmit = async (data) => {
-    const success = await signup(data);
+    await signup(data, {
+      onSuccess: () => {
+        toast({
+          title: "Successfully registered.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
 
-    if (!success)
-      return toast({
-        title: "Failed to register.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-
-    toast({
-      title: "Successfully registered.",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
+        return navigate("/messages");
+      },
+      onError: () =>
+        toast({
+          title: "Failed to register.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        }),
     });
-
-    return navigate("/messages");
   };
 
   return (
@@ -101,7 +103,7 @@ export default () => {
 
           <Input
             type="submit"
-            value="signUp"
+            value="Register"
             color="white"
             bg="blue.600"
             transition=".25s ease"

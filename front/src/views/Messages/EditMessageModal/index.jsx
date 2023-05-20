@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -22,13 +22,11 @@ import {
 
 import { EditIcon } from "@chakra-ui/icons";
 
-import { MessageContext } from "contexts/messages";
 import { messageSchema } from "../validationRules";
+import { useEditMessage } from "hooks/messages";
 
 export default ({ id, message }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const { editMessage } = useContext(MessageContext);
   const {
     register,
     reset,
@@ -41,25 +39,29 @@ export default ({ id, message }) => {
 
   const toast = useToast();
 
+  const editMessage = useEditMessage();
+
   const onSubmit = (data) => {
-    const success = editMessage(id, data);
-    if (success) {
-      toast({
-        title: "Sucessfully edited message.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-      reset();
-      onClose();
-    } else {
-      toast({
-        title: "Failed editing message.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+    editMessage(id, data, {
+      onSuccess: () => {
+        toast({
+          title: "Sucessfully edited message.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+
+        reset();
+        onClose();
+      },
+      onError: () =>
+        toast({
+          title: "Failed editing message.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        }),
+    });
   };
 
   return (

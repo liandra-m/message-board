@@ -6,16 +6,18 @@ import {
   createBrowserRouter,
   redirect,
   RouterProvider,
-  useLocation,
 } from "react-router-dom";
+
+import Register from "views/Auth/Register";
 import Login from "views/Auth/Login";
-import { ChakraProvider } from "@chakra-ui/react";
 import Messages from "views/Messages";
-import { MessageProvider } from "hooks/messages";
 import ErrorBoundary from "views/Errors/ErrorBoundary";
+
+import { ChakraProvider } from "@chakra-ui/react";
+
+import { MessageProvider } from "hooks/messages";
 import { AuthProvider } from "hooks/auth";
 import { ME } from "services/auth";
-import Register from "views/Auth/Register";
 
 const authHandler = async (req) => {
   const url = `/${req?.request?.url?.split("/").pop()}`;

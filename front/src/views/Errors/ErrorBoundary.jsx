@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default () => {
   const error = useRouteError();
+  console.log(error);
   const [errorMessage, setErrorMessage] = useState(
     "Seems like something is wrong :C"
   );

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 
 import {
   Modal,
@@ -13,36 +13,36 @@ import {
 } from "@chakra-ui/react";
 
 import { DeleteIcon } from "@chakra-ui/icons";
-
-import { MessageContext } from "contexts/messages";
+import { useDeleteMessage } from "hooks/messages";
 
 export default ({ id, title }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { deleteMessage } = useContext(MessageContext);
-
   const toast = useToast();
+
+  const deleteMessage = useDeleteMessage();
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const success = deleteMessage(id);
-    if (success) {
-      toast({
-        title: "Sucessfully deleted message.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-      onClose();
-    } else {
-      toast({
-        title: "Failed deleting message.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+    deleteMessage(id, {
+      onSuccess: () => {
+        toast({
+          title: "Sucessfully deleted message.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        onClose();
+      },
+      onError: () =>
+        toast({
+          title: "Failed deleting message.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        }),
+    });
   };
 
   return (

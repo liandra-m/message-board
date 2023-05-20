@@ -1,33 +1,36 @@
 import { Box, Flex, Text, useToast } from "@chakra-ui/react";
-import { useContext } from "react";
 import { FaUserAlt, FaArrowAltCircleRight, FaUser } from "react-icons/fa";
-import { AuthContext } from "contexts/auth";
+
 import { useNavigate } from "react-router";
 
+import { useLogout } from "hooks/auth";
+
 export default () => {
-  const { logout } = useContext(AuthContext);
+  const logout = useLogout();
   const navigate = useNavigate();
   const toast = useToast();
 
   const handleLogout = async () => {
-    const success = await logout();
+    logout({
+      onError: () =>
+        toast({
+          title: "Failed to logout.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        }),
 
-    if (!success)
-      return toast({
-        title: "Failed to logout.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      onSuccess: () => {
+        toast({
+          title: "Successfully logout.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
 
-    toast({
-      title: "Successfully logout.",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
+        return navigate("/login");
+      },
     });
-
-    return navigate("/login");
   };
 
   return (

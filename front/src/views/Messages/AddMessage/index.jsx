@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -14,11 +14,10 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 
-import { MessageContext } from "contexts/messages";
 import { messageSchema } from "../validationRules";
+import { useAddMessage } from "hooks/messages";
 
 export default () => {
-  const { addMessage } = useContext(MessageContext);
   const {
     register,
     handleSubmit,
@@ -31,28 +30,28 @@ export default () => {
 
   const toast = useToast();
 
-  const onSubmit = (data) => {
-    const success = addMessage(data);
+  const addMessage = useAddMessage();
 
-    success.then(
-      (data) => {
+  const onSubmit = (data) => {
+    addMessage(data, {
+      onSuccess: () => {
         toast({
           title: "Sucessfully added new message.",
           status: "success",
           duration: 5000,
           isClosable: true,
         });
+
         reset();
       },
-      (error) => {
+      onError: () =>
         toast({
           title: "Failed adding new message.",
           status: "error",
           duration: 5000,
           isClosable: true,
-        });
-      }
-    );
+        }),
+    });
   };
 
   return (

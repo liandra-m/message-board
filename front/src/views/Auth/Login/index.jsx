@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -16,40 +16,41 @@ import {
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-import { AuthContext } from "contexts/auth";
+import { useLogin } from "hooks/auth";
 
 export default () => {
-  const { login } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const [passwordVisibility, setVibility] = useState(false);
-
   const toast = useToast();
   const navigate = useNavigate();
 
+  const [passwordVisibility, setVibility] = useState(false);
+
+  const login = useLogin();
+
   const onSubmit = async (credentials) => {
-    const success = await login(credentials);
-
-    if (!success)
-      return toast({
-        title: "Failed to login.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-
-    toast({
-      title: "Successfully logged in.",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
+    await login(credentials, {
+      onSuccess: () => {
+        toast({
+          title: "Successfully logged in.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        return navigate("/messages");
+      },
+      onError: () =>
+        toast({
+          title: "Failed to login.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        }),
     });
-
-    return navigate("/messages");
   };
 
   return (

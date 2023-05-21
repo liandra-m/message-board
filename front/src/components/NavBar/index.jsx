@@ -10,14 +10,17 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { FaUserAlt, FaArrowAltCircleRight, FaUser } from "react-icons/fa";
+import { FaUserAlt } from "react-icons/fa";
 
 import { useNavigate } from "react-router";
 
 import { useLogout } from "hooks/auth";
-import { ArrowBackIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { useAuth } from "hooks/auth";
+import { useEffect } from "react";
 
 export default () => {
+  const { me, failed, loading } = useAuth();
   const logout = useLogout();
   const navigate = useNavigate();
   const toast = useToast();
@@ -65,15 +68,26 @@ export default () => {
             </Flex>
           </MenuButton>
           <MenuList color="gray.700">
-            <Text ml="12px">Signed as</Text>
-            <MenuDivider />
-            <MenuItem _hover={{ cursor: "pointer" }}>Profile</MenuItem>
-            <MenuItem
-              _hover={{ cursor: "pointer" }}
-              onClick={() => handleLogout()}
-            >
-              Logout
-            </MenuItem>
+            {!loading && !failed && me ? (
+              <>
+                <Text ml="12px">Signed as {me?.name}</Text>
+                <MenuDivider />
+                <MenuItem _hover={{ cursor: "pointer" }}>Profile</MenuItem>
+                <MenuItem
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => handleLogout()}
+                >
+                  Logout
+                </MenuItem>
+              </>
+            ) : (
+              <MenuItem
+                _hover={{ cursor: "pointer" }}
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </MenuItem>
+            )}
           </MenuList>
         </Menu>
       </Flex>

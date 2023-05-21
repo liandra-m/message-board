@@ -1,17 +1,47 @@
-import { createContext, useContext, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { LOGIN, REGISTER } from "services/auth";
 import authReducer from "./reducer";
+import { ME } from "services/auth";
 
 export const AuthContext = createContext();
 export const AuthDispatchContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, { auth: {} });
+  const [state, dispatch] = useReducer(authReducer, { me: {} });
+  const [failed, setFailed] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const me = async () => {
+    try {
+      const data = await ME();
+
+      dispatch({
+        type: "ME",
+        data: data,
+      });
+    } catch (error) {
+      setFailed(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    me();
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
-        auth: state.auth,
+        me: state.me,
+        failed,
+        loading,
       }}
     >
       <AuthDispatchContext.Provider value={dispatch}>
@@ -21,11 +51,23 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-function useDispatch() {
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context)
+    throw new Error("useMessages must be used within a MessagesProvider");
+
+  return context;
+};
+
+export const useDispatch = () => {
   const dispatch = useContext(AuthDispatchContext);
 
+  if (!dispatch)
+    throw new Error("useMessages must be used within a MessagesProvider");
+
   return dispatch;
-}
+};
 
 export const useLogin = () => {
   const dispatch = useDispatch();
@@ -36,8 +78,8 @@ export const useLogin = () => {
     try {
       const response = await LOGIN(credentials);
 
-      window.localStorage.setItem("token", response);
-      dispatch({ type: "LOGIN", data: response });
+      window.localStorage.setItem("token", response?.token);
+      dispatch({ type: "ME", data: response?.user });
 
       onSuccess();
     } catch (error) {
@@ -57,8 +99,8 @@ export const useSignup = () => {
     try {
       const response = await REGISTER(data);
 
-      window.localStorage.setItem("token", response);
-      dispatch({ type: "LOGIN", data: response });
+      window.localStorage.setItem("token", response?.token);
+      dispatch({ type: "ME", data: response?.user });
 
       onSuccess();
     } catch (error) {

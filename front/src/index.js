@@ -31,6 +31,7 @@ const authHandler = async (req) => {
 
 const router = createBrowserRouter([
   {
+    id: "root",
     path: "/",
     loader: authHandler,
     errorElement: <ErrorBoundary />,

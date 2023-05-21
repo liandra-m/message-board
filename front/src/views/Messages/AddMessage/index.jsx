@@ -55,9 +55,14 @@ export default () => {
   };
 
   return (
-    <Center>
+    <Center bg="white" margin="1em .5em" padding="2em 4em" borderRadius="12px">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack spacing="24px">
+        <VStack
+          spacing="24px"
+          justify="center"
+          align="center"
+          textAlign="center"
+        >
           <FormControl marginTop="1em" isInvalid={errors?.title}>
             <FormLabel>Title</FormLabel>
             <Input
@@ -78,7 +83,7 @@ export default () => {
             <FormErrorMessage>{errors?.body?.message}</FormErrorMessage>
           </FormControl>
           <FormControl marginTop="1em">
-            <Button colorScheme="blue" type="submit">
+            <Button w="100%" colorScheme="blue" type="submit">
               Add Message
             </Button>
           </FormControl>

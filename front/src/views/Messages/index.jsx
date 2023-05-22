@@ -21,10 +21,6 @@ export default () => {
   const { messages, loading, failed } = useMessages();
   const { me: user, loading: loadingUser } = useAuth();
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   return (
     <>
       <NavBar />
@@ -45,9 +41,13 @@ export default () => {
                     padding="1em"
                     borderRadius="12px"
                   >
+                    <Text color="gray.600" mb="1em">
+                      Written by {message?.user?.name || "Guest"}
+                    </Text>
                     <Heading>{message.title}</Heading>
-                    <Text>{message.body}</Text>
-                    {user && (
+                    <Text mb="1em">{message.body}</Text>
+                    <Text color="gray.600">{message?.createdAt}</Text>
+                    {user && user?.id === message?.user_id && (
                       <Box
                         padding="5px 10px"
                         marginTop="1em"

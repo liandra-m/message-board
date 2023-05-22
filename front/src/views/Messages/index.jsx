@@ -48,6 +48,11 @@ export default () => {
                       Written by {message?.user?.name || "Guest"}{" "}
                       {formatDate(message?.createdAt)}
                     </Text>
+                    {message?.updatedAt !== message?.createdAt && (
+                      <Text color="gray.600" mb=".5em">
+                        Updated at {formatDate(message?.updatedAt)}
+                      </Text>
+                    )}
                     {user && user?.id === message?.user_id && (
                       <Box
                         padding="5px 10px"

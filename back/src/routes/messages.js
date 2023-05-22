@@ -19,7 +19,11 @@ router.get(BASE_PATH, async (req, res) => {
 
 router.post(BASE_PATH, async (req, res) => {
   try {
-    const message = await Message.create(req.body);
+    const newMessage = await Message.create(req.body);
+
+    const message = await Message.findByPk(newMessage?.id, {
+      include: { model: User, as: "user", attributes: { exclude: "password" } },
+    });
 
     res.status(201).send(message);
   } catch (error) {
@@ -35,7 +39,9 @@ router.put(`${BASE_PATH}/:id`, async (req, res) => {
       },
     });
 
-    const message = await Message.findByPk(req?.params?.id);
+    const message = await Message.findByPk(req?.params?.id, {
+      include: { model: User, as: "user", attributes: { exclude: "password" } },
+    });
 
     res.status(200).send(message);
   } catch (error) {

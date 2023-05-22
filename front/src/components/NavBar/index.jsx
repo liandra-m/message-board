@@ -1,11 +1,26 @@
-import { Box, Flex, Text, useToast } from "@chakra-ui/react";
-import { FaUserAlt, FaArrowAltCircleRight, FaUser } from "react-icons/fa";
+import {
+  Box,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+import { FaUserAlt } from "react-icons/fa";
 
 import { useNavigate } from "react-router";
 
 import { useLogout } from "hooks/auth";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { useAuth } from "hooks/auth";
+import { useEffect } from "react";
 
 export default () => {
+  const { me, failed, loading } = useAuth();
   const logout = useLogout();
   const navigate = useNavigate();
   const toast = useToast();
@@ -35,33 +50,46 @@ export default () => {
 
   return (
     <Box w="100%" minH="50px" bg="blue.500" padding="1em" color="white">
-      <Flex align="center" justify="space-between">
+      <Flex align="center" justify="space-between" padding="0 10%">
         <Text fontWeight="bold" fontSize="24px">
           Message Board
         </Text>
-        <Flex gap="24px">
-          <Flex
-            borderRadius="50%"
-            w="50px"
-            h="50px"
-            bg="blue.600"
-            align="center"
-            justify="center"
-            gap="12px"
-            _hover={{ cursor: "pointer" }}
-          >
-            <FaUserAlt />
-          </Flex>
-          <Flex
-            align="center"
-            gap="12px"
-            _hover={{ cursor: "pointer" }}
-            onClick={() => handleLogout()}
-          >
-            <Text>Logout</Text>
-            <FaArrowAltCircleRight />
-          </Flex>
-        </Flex>
+        <Menu offset={[-150, 7]}>
+          <MenuButton rightIcon={<ChevronDownIcon />}>
+            <Flex
+              w="50px"
+              h="50px"
+              borderRadius="50%"
+              bg="blue.700"
+              align="center"
+              justify="center"
+            >
+              <FaUserAlt />
+            </Flex>
+          </MenuButton>
+          <MenuList color="gray.700">
+            {!loading && !failed && me ? (
+              <>
+                <Text ml="12px">Signed as {me?.name}</Text>
+                <MenuDivider />
+                <MenuItem _hover={{ cursor: "pointer" }}>Profile</MenuItem>
+                <MenuItem
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => handleLogout()}
+                >
+                  Logout
+                </MenuItem>
+              </>
+            ) : (
+              <MenuItem
+                _hover={{ cursor: "pointer" }}
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </MenuItem>
+            )}
+          </MenuList>
+        </Menu>
       </Flex>
     </Box>
   );

@@ -21,7 +21,7 @@ export default () => {
   return (
     <>
       <NavBar />
-      <Flex direction="column" align="center" justify="center">
+      <Flex direction="column" align="center" justify="center" bg="gray.100">
         <AddMessage />
         {loading ? (
           <Box padding="6" boxShadow="lg" bg="white">
@@ -31,12 +31,15 @@ export default () => {
           <div>
             {messages.map((message) => {
               return (
-                <Box minW="100%" key={message.id} margin="1em 0">
-                  <Box textAlign="left">
-                    <Box marginLeft="10px">
-                      <Heading>{message.title}</Heading>
-                      <Text>{message.body}</Text>
-                    </Box>
+                <Box key={message.id} margin="1em 0">
+                  <Box
+                    textAlign="left"
+                    bg="white"
+                    padding="1em"
+                    borderRadius="12px"
+                  >
+                    <Heading>{message.title}</Heading>
+                    <Text>{message.body}</Text>
                     <Box
                       padding="5px 10px"
                       marginTop="1em"

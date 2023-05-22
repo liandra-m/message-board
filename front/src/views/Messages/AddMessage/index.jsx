@@ -16,6 +16,7 @@ import {
 
 import { messageSchema } from "../validationRules";
 import { useAddMessage } from "hooks/messages";
+import { useAuth } from "hooks/auth";
 
 export default () => {
   const {
@@ -32,7 +33,11 @@ export default () => {
 
   const addMessage = useAddMessage();
 
+  const { me: user } = useAuth();
+
   const onSubmit = (data) => {
+    data.user_id = user?.id;
+
     addMessage(data, {
       onSuccess: () => {
         toast({

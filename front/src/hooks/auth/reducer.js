@@ -1,14 +1,14 @@
 export default function authReducer(state, action) {
   switch (action.type) {
-    case "LOGIN":
+    case "ME":
       return {
         ...state,
-        auth: action.data,
+        me: action.data,
       };
     case "LOGOUT":
       return {
         ...state,
-        auth: {},
+        me: null,
       };
     default:
       return state;

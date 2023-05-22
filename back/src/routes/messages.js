@@ -1,58 +1,66 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/message");
+const User = require("../models/user");
 
 const BASE_PATH = "/messages";
 
 router.get(BASE_PATH, async (req, res) => {
-  const messages = await Message.findAll();
+  try {
+    const messages = await Message.findAll({
+      include: { model: User, as: "user", attributes: { exclude: "password" } },
+    });
 
-  res.send(messages);
+    res.status(200).send(messages);
+  } catch (error) {
+    res.status(500).send("Unable to retrieve messages");
+  }
 });
 
 router.post(BASE_PATH, async (req, res) => {
   try {
-    var message = await Message.create(req.body);
-  } catch (error) {
-    console.error(`Unable to create message. Error: ${error}`);
-  }
+    const newMessage = await Message.create(req.body);
 
-  res.send(message || "An error has ocurred");
+    const message = await Message.findByPk(newMessage?.id, {
+      include: { model: User, as: "user", attributes: { exclude: "password" } },
+    });
+
+    res.status(201).send(message);
+  } catch (error) {
+    res.status(500).send(`Unable to create message`);
+  }
 });
 
 router.put(`${BASE_PATH}/:id`, async (req, res) => {
   try {
-    var message = await Message.update(req.body, {
+    await Message.update(req.body, {
       where: {
         id: req.params.id,
       },
     });
 
-    message = await Message.findAll({
-      where: {
-        id: req.params.id,
-      },
+    const message = await Message.findByPk(req?.params?.id, {
+      include: { model: User, as: "user", attributes: { exclude: "password" } },
     });
+
+    res.status(200).send(message);
   } catch (error) {
-    console.error(`Unable to update message ${req.params.id}. Error: ${error}`);
+    res.status(500).send(`Unable to update message`);
   }
-
-  res.send(message);
 });
 
 router.delete(`${BASE_PATH}/:id`, async (req, res) => {
   try {
-    var message = await Message.destroy({
+    await Message.destroy({
       where: {
         id: req.params.id,
       },
     });
-    console.log(message);
-  } catch (error) {
-    console.error(`Unable to delete message ${req.params.id}. Error: ${error}`);
-  }
 
-  res.send(message > 0 ? "Sucessfully deleted" : "An error has ocurred");
+    res.status(200).send("Successfully deleted message");
+  } catch (error) {
+    res.status(500).send("Unable to delete message");
+  }
 });
 
 module.exports = router;

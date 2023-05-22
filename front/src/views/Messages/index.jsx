@@ -16,6 +16,7 @@ import AddMessage from "./AddMessage";
 
 import { useMessages } from "hooks/messages";
 import { useAuth } from "hooks/auth";
+import { formatDate } from "functions/date";
 
 export default () => {
   const { messages, loading, failed } = useMessages();
@@ -41,12 +42,12 @@ export default () => {
                     padding="1em"
                     borderRadius="12px"
                   >
-                    <Text color="gray.600" mb="1em">
-                      Written by {message?.user?.name || "Guest"}
-                    </Text>
                     <Heading>{message.title}</Heading>
                     <Text mb="1em">{message.body}</Text>
-                    <Text color="gray.600">{message?.createdAt}</Text>
+                    <Text color="gray.600" mb="1em">
+                      Written by {message?.user?.name || "Guest"}{" "}
+                      {formatDate(message?.createdAt)}
+                    </Text>
                     {user && user?.id === message?.user_id && (
                       <Box
                         padding="5px 10px"

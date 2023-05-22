@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -12,6 +12,7 @@ import {
   IconButton,
   Input,
   Link,
+  Text,
   VStack,
   useToast,
 } from "@chakra-ui/react";
@@ -110,14 +111,16 @@ export default () => {
             _hover={{ cursor: "pointer", bg: "blue.500" }}
           />
 
-          <Link
-            href="/login"
-            color="gray.600"
-            transition=".25s ease"
-            _hover={{ color: "gray.700" }}
-          >
-            Already have an account? Click here
-          </Link>
+          <NavLink to="/login">
+            <Text
+              color="gray.600"
+              transition=".25s ease"
+              textDecoration="underline"
+              _hover={{ color: "gray.700" }}
+            >
+              Already have an account? Click here
+            </Text>
+          </NavLink>
         </VStack>
       </form>
     </Center>

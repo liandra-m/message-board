@@ -1,6 +1,4 @@
-import React from "react";
-
-import EditMessageModal from "./EditMessageModal";
+import React, { useEffect } from "react";
 
 import {
   Text,
@@ -10,20 +8,29 @@ import {
   Center,
   Flex,
 } from "@chakra-ui/react";
+
+import NavBar from "components/NavBar";
+import EditMessageModal from "./EditMessageModal";
 import DeleteMessageModal from "./DeleteMessageModal";
 import AddMessage from "./AddMessage";
-import NavBar from "components/NavBar";
+
 import { useMessages } from "hooks/messages";
+import { useAuth } from "hooks/auth";
 
 export default () => {
   const { messages, loading, failed } = useMessages();
+  const { me: user, loading: loadingUser } = useAuth();
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <>
       <NavBar />
       <Flex direction="column" align="center" justify="center" bg="gray.100">
         <AddMessage />
-        {loading ? (
+        {loading || loadingUser ? (
           <Box padding="6" boxShadow="lg" bg="white">
             <SkeletonText mt="4" noOfLines={4} spacing="4" />
           </Box>
@@ -40,22 +47,24 @@ export default () => {
                   >
                     <Heading>{message.title}</Heading>
                     <Text>{message.body}</Text>
-                    <Box
-                      padding="5px 10px"
-                      marginTop="1em"
-                      textAlign="right"
-                      backgroundColor="gray.100"
-                      borderBottomRadius="10px"
-                    >
-                      <EditMessageModal
-                        id={message.id}
-                        message={{ title: message.title, body: message.body }}
-                      />
-                      <DeleteMessageModal
-                        id={message.id}
-                        title={message.title}
-                      />
-                    </Box>
+                    {user && (
+                      <Box
+                        padding="5px 10px"
+                        marginTop="1em"
+                        textAlign="right"
+                        backgroundColor="gray.100"
+                        borderBottomRadius="10px"
+                      >
+                        <EditMessageModal
+                          id={message.id}
+                          message={{ title: message.title, body: message.body }}
+                        />
+                        <DeleteMessageModal
+                          id={message.id}
+                          title={message.title}
+                        />
+                      </Box>
+                    )}
                   </Box>
                 </Box>
               );

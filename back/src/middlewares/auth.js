@@ -1,8 +1,18 @@
 const jwt = require("jsonwebtoken");
 
 const verifyJWTToken = (req, res, next) => {
-  const publicRoutes = ["/register", "/login", "/me"];
-  if (publicRoutes.includes(req.originalUrl)) return next();
+  const publicRoutes = {
+    "/register": { methods: ["POST"] },
+    "/login": { methods: ["POST"] },
+    "/me": { methods: ["POST"] },
+    "/messages": { methods: ["GET", "POST"] },
+  };
+
+  if (Object.keys(publicRoutes).includes(req.originalUrl)) {
+    const route = publicRoutes[req.originalUrl];
+    if (route?.methods?.includes(req.method) || route?.methods === "ALL")
+      return next();
+  }
 
   const token = req.headers["authorization"]?.replace("Bearer ", "");
 

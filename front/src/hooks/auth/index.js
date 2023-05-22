@@ -13,7 +13,7 @@ export const AuthContext = createContext();
 export const AuthDispatchContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, { me: {} });
+  const [state, dispatch] = useReducer(authReducer, { me: null });
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(true);
 

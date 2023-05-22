@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import {
@@ -10,6 +10,7 @@ import {
   IconButton,
   Input,
   Link,
+  Text,
   VStack,
   useToast,
 } from "@chakra-ui/react";
@@ -87,14 +88,26 @@ export default () => {
             _hover={{ cursor: "pointer", bg: "blue.500" }}
           />
 
-          <Link
-            href="/register"
-            color="gray.600"
-            transition=".25s ease"
-            _hover={{ color: "gray.700" }}
-          >
-            Don't have an account? Click here
-          </Link>
+          <NavLink to="/register">
+            <Text
+              color="gray.600"
+              transition=".25s ease"
+              textDecoration="underline"
+              _hover={{ color: "gray.700" }}
+            >
+              Don't have an account? Click here
+            </Text>
+          </NavLink>
+
+          <NavLink to="/messages">
+            <Text
+              color="gray.600"
+              transition=".25s ease"
+              _hover={{ color: "gray.700" }}
+            >
+              Continue as a guest
+            </Text>
+          </NavLink>
         </VStack>
       </form>
     </Center>

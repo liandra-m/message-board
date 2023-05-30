@@ -1,18 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Text, Box, SkeletonText, Flex } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
 import AddMessage from "../../components/AddMessage";
 
-import { useMessages } from "hooks/messages";
+import { useGetMessages } from "hooks/messages";
 import { useAuth } from "hooks/auth";
 
 import MessageCard from "../../components/MessageCard";
 
 export default () => {
-  const { messages, loading, failed } = useMessages();
   const { me: user, loading: loadingUser } = useAuth();
+
+  const [getMessages, { messages, loading, failed }] = useGetMessages();
+
+  const handleMessages = async () => {
+    await getMessages();
+  };
+
+  useEffect(() => {
+    handleMessages();
+  }, []);
 
   return (
     <>

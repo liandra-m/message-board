@@ -6,6 +6,7 @@ import ErrorBoundary from "views/Errors/ErrorBoundary";
 import { MessageProvider } from "hooks/messages";
 
 import { loader } from "./loader";
+import Profile from "views/Profile";
 
 export const routes = [
   {
@@ -27,6 +28,14 @@ export const routes = [
         element: (
           <MessageProvider>
             <Messages />
+          </MessageProvider>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <MessageProvider>
+            <Profile />
           </MessageProvider>
         ),
       },

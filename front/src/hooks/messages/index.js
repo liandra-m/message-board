@@ -19,32 +19,9 @@ export const MessageDispatchContext = createContext();
 
 export const MessageProvider = ({ children }) => {
   const [state, dispatch] = useReducer(messageReducer, { messages: [] });
-  const [failed, setFailed] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  const getMessages = async () => {
-    try {
-      const data = await GET_MESSAGES();
-
-      dispatch({
-        type: "LIST_MESSAGES",
-        payload: data,
-      });
-    } catch (error) {
-      setFailed(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getMessages();
-  }, []);
 
   return (
-    <MessageContext.Provider
-      value={{ messages: state.messages, failed, loading }}
-    >
+    <MessageContext.Provider value={{ messages: state.messages }}>
       <MessageDispatchContext.Provider value={dispatch}>
         {children}
       </MessageDispatchContext.Provider>
@@ -68,6 +45,31 @@ export const useDispatch = () => {
     throw new Error("useMessages must be used within a MessagesProvider");
 
   return dispatch;
+};
+
+export const useGetMessages = () => {
+  const { messages } = useMessages();
+  const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
+
+  const getMessages = async (filters) => {
+    try {
+      const data = await GET_MESSAGES(filters);
+
+      dispatch({
+        type: "LIST_MESSAGES",
+        payload: data,
+      });
+    } catch (error) {
+      setFailed(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return [getMessages, { messages, failed, loading }];
 };
 
 export const useAddMessage = () => {

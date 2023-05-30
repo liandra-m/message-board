@@ -1,26 +1,27 @@
 import React, { useEffect } from "react";
 
-import {
-  Text,
-  Heading,
-  Box,
-  SkeletonText,
-  Center,
-  Flex,
-} from "@chakra-ui/react";
+import { Text, Box, SkeletonText, Flex } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
-import EditMessageModal from "./EditMessageModal";
-import DeleteMessageModal from "./DeleteMessageModal";
-import AddMessage from "./AddMessage";
+import AddMessage from "../../components/AddMessage";
 
-import { useMessages } from "hooks/messages";
+import { useGetMessages } from "hooks/messages";
 import { useAuth } from "hooks/auth";
-import { formatDate } from "functions/date";
+
+import MessageCard from "../../components/MessageCard";
 
 export default () => {
-  const { messages, loading, failed } = useMessages();
   const { me: user, loading: loadingUser } = useAuth();
+
+  const [getMessages, { messages, loading, failed }] = useGetMessages();
+
+  const handleMessages = async () => {
+    await getMessages();
+  };
+
+  useEffect(() => {
+    handleMessages();
+  }, []);
 
   return (
     <>
@@ -34,46 +35,7 @@ export default () => {
         ) : messages && messages.length > 0 ? (
           <div>
             {messages.map((message) => {
-              return (
-                <Box key={message.id} margin="1em 0">
-                  <Box
-                    textAlign="left"
-                    bg="white"
-                    padding="1em"
-                    borderRadius="12px"
-                  >
-                    <Heading>{message.title}</Heading>
-                    <Text mb="1em">{message.body}</Text>
-                    <Text color="gray.600" mb="1em">
-                      Written by {message?.user?.name || "Guest"}{" "}
-                      {formatDate(message?.createdAt)}
-                    </Text>
-                    {message?.updatedAt !== message?.createdAt && (
-                      <Text color="gray.600" mb=".5em">
-                        Updated at {formatDate(message?.updatedAt)}
-                      </Text>
-                    )}
-                    {user && user?.id === message?.user_id && (
-                      <Box
-                        padding="5px 10px"
-                        marginTop="1em"
-                        textAlign="right"
-                        backgroundColor="gray.100"
-                        borderBottomRadius="10px"
-                      >
-                        <EditMessageModal
-                          id={message.id}
-                          message={{ title: message.title, body: message.body }}
-                        />
-                        <DeleteMessageModal
-                          id={message.id}
-                          title={message.title}
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                </Box>
-              );
+              return <MessageCard user={user} message={message} />;
             })}
           </div>
         ) : (

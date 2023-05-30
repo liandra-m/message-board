@@ -1,4 +1,4 @@
-export const formatDate = (date) => {
+export const getRelativeTime = (date) => {
   const now = new Date();
   date = new Date(date);
 
@@ -22,4 +22,19 @@ export const formatDate = (date) => {
 
   const months = Math.floor(diff / 2592000);
   return `${months} month${months > 1 ? "s" : ""} ago`;
+};
+
+export const formatDateTime = (date) => {
+  const aditionalZero = (value) => {
+    if (value <= 9) return "0" + value;
+    return value;
+  };
+
+  date = new Date(date);
+
+  return `${aditionalZero(date.getDate())}/${aditionalZero(
+    date.getMonth()
+  )}/${date.getFullYear()} ${date.getHours()}:${aditionalZero(
+    date.getMinutes()
+  )}`;
 };

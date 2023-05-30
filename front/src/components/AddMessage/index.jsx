@@ -14,7 +14,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 
-import { messageSchema } from "../validationRules";
+import { messageSchema } from "../../views/Messages/validationRules";
 import { useAddMessage } from "hooks/messages";
 import { useAuth } from "hooks/auth";
 

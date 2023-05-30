@@ -22,7 +22,7 @@ import {
 
 import { EditIcon } from "@chakra-ui/icons";
 
-import { messageSchema } from "../validationRules";
+import { messageSchema } from "views/Messages/validationRules";
 import { useEditMessage } from "hooks/messages";
 
 export default ({ id, message }) => {

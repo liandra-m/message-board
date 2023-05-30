@@ -1,7 +1,8 @@
-import { Box, Center, Flex } from "@chakra-ui/react";
+import { Avatar, Box, Center, Flex, Text, VStack } from "@chakra-ui/react";
 import MessageCard from "components/MessageCard";
 
 import NavBar from "components/NavBar";
+import { formatDateTime } from "functions/date";
 
 import { useAuth } from "hooks/auth";
 import { useGetMessages } from "hooks/messages";
@@ -28,7 +29,42 @@ export default () => {
       <NavBar />
       {!loadingUser && !loadingMessages && (
         <Flex justify="space-around" padding="0 10%" bg="gray.100">
-          <Box minH="200px" background="blue.600" minW="100px"></Box>
+          <Flex
+            background="blue.500"
+            minH="400px"
+            maxH="600px"
+            w="300px"
+            m="1em"
+            direction="column"
+            align="center"
+            justify="center"
+            padding="2em 1em"
+          >
+            <Avatar border="2px solid white" w="80px" h="80px" mb=".75em" />
+            <Text mb=".75em" color="white" fontSize="24px" fontWeight="bold">
+              {user?.name}
+            </Text>
+            <VStack
+              color="white"
+              spacing="12px"
+              w="100%"
+              align="start"
+              marginLeft="1em"
+            >
+              <Flex direction="column">
+                <Text color="gray.300">email</Text>
+                <Text>{user?.email}</Text>
+              </Flex>
+              <Flex direction="column">
+                <Text color="gray.300">Registered in</Text>
+                <Text>{formatDateTime(user?.createdAt)}</Text>
+              </Flex>
+              <Flex direction="column">
+                <Text color="gray.300">Posted</Text>
+                <Text>{messages?.length} messages</Text>
+              </Flex>
+            </VStack>
+          </Flex>
           <Flex direction="column" align="center" justify="center">
             {messages?.map((message) => (
               <MessageCard

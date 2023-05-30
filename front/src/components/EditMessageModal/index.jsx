@@ -25,7 +25,7 @@ import { EditIcon } from "@chakra-ui/icons";
 import { messageSchema } from "views/Messages/validationRules";
 import { useEditMessage } from "hooks/messages";
 
-export default ({ id, message }) => {
+export default ({ message }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     register,
@@ -42,7 +42,7 @@ export default ({ id, message }) => {
   const editMessage = useEditMessage();
 
   const onSubmit = (data) => {
-    editMessage(id, data, {
+    editMessage(message?.id, data, {
       onSuccess: () => {
         toast({
           title: "Sucessfully edited message.",
@@ -86,6 +86,7 @@ export default ({ id, message }) => {
                   type="text"
                   placeholder="This is a title"
                   maxLength={255}
+                  defaultValue={message?.title}
                 />
                 <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
               </FormControl>
@@ -95,6 +96,7 @@ export default ({ id, message }) => {
                   {...register("body")}
                   type="text"
                   placeholder="Lorem ipsum..."
+                  defaultValue={message?.body}
                 />
               </FormControl>
               <FormErrorMessage>{errors?.body?.message}</FormErrorMessage>

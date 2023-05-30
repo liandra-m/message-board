@@ -28,11 +28,8 @@ export default ({ message = {}, user = {}, profile = false }) => {
             backgroundColor="gray.100"
             borderBottomRadius="10px"
           >
-            <EditMessageModal
-              id={message.id}
-              message={{ title: message.title, body: message.body }}
-            />
-            <DeleteMessageModal id={message.id} title={message.title} />
+            <EditMessageModal message={message} />
+            <DeleteMessageModal message={message} />
           </Box>
         )}
       </Box>

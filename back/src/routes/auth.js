@@ -18,7 +18,12 @@ router.post("/login", async (req, res) => {
     const token = generateJWTToken(user);
 
     return res.status(200).send({
-      user: { id: user?.id, name: user?.name, email: user?.email },
+      user: {
+        id: user?.id,
+        name: user?.name,
+        email: user?.email,
+        createdAt: user?.createdAt,
+      },
       token,
     });
   } catch (error) {
@@ -44,7 +49,12 @@ router.post("/register", async (req, res) => {
     const token = generateJWTToken(user);
 
     return res.status(201).send({
-      user: { id: user?.id, name: user?.name, email: user?.email },
+      user: {
+        id: user?.id,
+        name: user?.name,
+        email: user?.email,
+        createdAt: user?.createdAt,
+      },
       token,
     });
   } catch (error) {

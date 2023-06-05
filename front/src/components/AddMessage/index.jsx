@@ -12,6 +12,7 @@ import {
   VStack,
   Center,
   FormErrorMessage,
+  Flex,
 } from "@chakra-ui/react";
 
 import { messageSchema } from "../../views/Messages/validationRules";
@@ -60,15 +61,21 @@ export default () => {
   };
 
   return (
-    <Center bg="white" margin="1em .5em" padding="2em 4em" borderRadius="12px">
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Flex
+      bg="white"
+      margin="1em .5em"
+      padding="2em .5em"
+      borderRadius="12px"
+      justify="center"
+    >
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: 50 + "%" }}>
         <VStack
           spacing="24px"
           justify="center"
           align="center"
           textAlign="center"
         >
-          <FormControl marginTop="1em" isInvalid={errors?.title}>
+          <FormControl isInvalid={errors?.title}>
             <FormLabel>Title</FormLabel>
             <Input
               {...register("title")}
@@ -78,22 +85,23 @@ export default () => {
             />
             <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl marginTop="1em" isInvalid={errors?.body}>
+          <FormControl isInvalid={errors?.body}>
             <FormLabel>Content</FormLabel>
             <Textarea
               {...register("body")}
               type="text"
+              rows={5}
               placeholder="Lorem ipsum..."
             />
             <FormErrorMessage>{errors?.body?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl marginTop="1em">
-            <Button w="100%" colorScheme="blue" type="submit">
+          <FormControl>
+            <Button colorScheme="blue" type="submit">
               Add Message
             </Button>
           </FormControl>
         </VStack>
       </form>
-    </Center>
+    </Flex>
   );
 };

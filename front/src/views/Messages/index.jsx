@@ -26,25 +26,25 @@ export default () => {
   return (
     <>
       <NavBar />
-      <Flex direction="column" align="center" justify="center" bg="gray.100">
-        <AddMessage />
-        {loading || loadingUser ? (
-          <Box padding="6" boxShadow="lg" bg="white">
-            <SkeletonText mt="4" noOfLines={4} spacing="4" />
-          </Box>
-        ) : messages && messages.length > 0 ? (
-          <div>
-            {messages.map((message) => {
+      <Flex direction="column" align="center" justify="center">
+        <Flex w="75%" m="1em 2.5em" direction="column">
+          <AddMessage />
+          {loading || loadingUser ? (
+            <Box padding="6" boxShadow="lg" bg="white">
+              <SkeletonText mt="4" noOfLines={4} spacing="4" />
+            </Box>
+          ) : messages && messages.length > 0 ? (
+            messages.map((message) => {
               return <MessageCard user={user} message={message} />;
-            })}
-          </div>
-        ) : (
-          <Box>
-            <Text marginTop="1em">
-              {failed ? "Error listing messages" : "No messages to show"}
-            </Text>
-          </Box>
-        )}
+            })
+          ) : (
+            <Box>
+              <Text marginTop="1em">
+                {failed ? "Error listing messages" : "No messages to show"}
+              </Text>
+            </Box>
+          )}
+        </Flex>
       </Flex>
     </>
   );

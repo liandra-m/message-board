@@ -8,7 +8,7 @@ export default function messageReducer(state, action) {
     case "ADD_MESSAGE":
       return {
         ...state,
-        messages: [...state.messages, action.payload],
+        messages: [action.payload, ...state.messages],
       };
 
     case "EDIT_MESSAGE":

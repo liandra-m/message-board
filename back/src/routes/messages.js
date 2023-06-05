@@ -15,6 +15,10 @@ router.get(BASE_PATH, async (req, res) => {
         attributes: { exclude: EXCLUDE_ATTR },
       },
       where: req?.query || {},
+      order: [
+        ["createdAt", "DESC"],
+        ["updatedAt", "DESC"],
+      ],
     });
 
     res.status(200).send(messages);

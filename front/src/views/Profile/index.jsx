@@ -33,8 +33,8 @@ export default () => {
             background="blue.500"
             minH="400px"
             maxH="600px"
-            w="300px"
-            m="1em"
+            w="25%"
+            m="1em 2.5em"
             direction="column"
             align="center"
             justify="center"
@@ -65,7 +65,12 @@ export default () => {
               </Flex>
             </VStack>
           </Flex>
-          <Flex direction="column" align="center" justify="center">
+          <Flex
+            w="75%"
+            direction="column"
+            align="center"
+            justify="center"
+          >
             {messages?.map((message) => (
               <MessageCard
                 message={message}

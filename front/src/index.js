@@ -7,14 +7,16 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import { AuthProvider } from "hooks/auth";
 
-import { routes } from "./router/routes";
+import { routes } from "router/routes";
+
+import { theme } from "styling/theme";
 
 const router = createBrowserRouter(routes);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>

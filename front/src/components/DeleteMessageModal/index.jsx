@@ -10,6 +10,7 @@ import {
   Button,
   useDisclosure,
   useToast,
+  Box,
 } from "@chakra-ui/react";
 
 import { DeleteIcon } from "@chakra-ui/icons";
@@ -47,11 +48,15 @@ export default ({ message }) => {
 
   return (
     <>
-      <DeleteIcon
-        _hover={{ cursor: "pointer" }}
-        marginRight="10px"
+      <Box
+        padding=".5em"
+        borderRadius="50%"
+        transition=".25s ease"
+        _hover={{ cursor: "pointer", color: "red.400", bg: "blue.700" }}
         onClick={onOpen}
-      />
+      >
+        <DeleteIcon minH="25px" minW="25px" />
+      </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

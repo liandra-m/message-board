@@ -18,6 +18,7 @@ import {
   Input,
   useDisclosure,
   useToast,
+  Box,
 } from "@chakra-ui/react";
 
 import { EditIcon } from "@chakra-ui/icons";
@@ -66,11 +67,15 @@ export default ({ message }) => {
 
   return (
     <>
-      <EditIcon
-        margin="0 10px"
-        _hover={{ cursor: "pointer" }}
+      <Box
+        padding=".5em"
+        borderRadius="50%"
+        transition=".25s ease"
+        _hover={{ cursor: "pointer", color: "yellow.400", bg: "blue.700" }}
         onClick={onOpen}
-      />
+      >
+        <EditIcon minW="25px" minH="25px" />
+      </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

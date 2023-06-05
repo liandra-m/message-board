@@ -18,6 +18,7 @@ import { useLogout } from "hooks/auth";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useAuth } from "hooks/auth";
 import { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 export default () => {
   const { me, failed, loading } = useAuth();
@@ -51,9 +52,11 @@ export default () => {
   return (
     <Box w="100%" minH="50px" bg="blue.500" padding="1em" color="white">
       <Flex align="center" justify="space-between" padding="0 10%">
-        <Text fontWeight="bold" fontSize="24px">
-          Message Board
-        </Text>
+        <NavLink to="/messages" _hover={{ cursor: "pointer" }}>
+          <Text fontWeight="bold" fontSize="24px">
+            Message Board
+          </Text>
+        </NavLink>
         <Menu offset={[-150, 7]}>
           <MenuButton rightIcon={<ChevronDownIcon />}>
             <Flex
@@ -72,7 +75,12 @@ export default () => {
               <>
                 <Text ml="12px">Signed as {me?.name}</Text>
                 <MenuDivider />
-                <MenuItem _hover={{ cursor: "pointer" }}>Profile</MenuItem>
+                <MenuItem
+                  onClick={() => navigate("/profile")}
+                  _hover={{ cursor: "pointer" }}
+                >
+                  Profile
+                </MenuItem>
                 <MenuItem
                   _hover={{ cursor: "pointer" }}
                   onClick={() => handleLogout()}

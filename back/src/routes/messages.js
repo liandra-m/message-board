@@ -4,11 +4,17 @@ const Message = require("../models/message");
 const User = require("../models/user");
 
 const BASE_PATH = "/messages";
+const EXCLUDE_ATTR = ["password", "email"];
 
 router.get(BASE_PATH, async (req, res) => {
   try {
     const messages = await Message.findAll({
-      include: { model: User, as: "user", attributes: { exclude: "password" } },
+      include: {
+        model: User,
+        as: "user",
+        attributes: { exclude: EXCLUDE_ATTR },
+      },
+      where: req?.query || {},
     });
 
     res.status(200).send(messages);
@@ -22,7 +28,11 @@ router.post(BASE_PATH, async (req, res) => {
     const newMessage = await Message.create(req.body);
 
     const message = await Message.findByPk(newMessage?.id, {
-      include: { model: User, as: "user", attributes: { exclude: "password" } },
+      include: {
+        model: User,
+        as: "user",
+        attributes: { exclude: EXCLUDE_ATTR },
+      },
     });
 
     res.status(201).send(message);
@@ -40,7 +50,11 @@ router.put(`${BASE_PATH}/:id`, async (req, res) => {
     });
 
     const message = await Message.findByPk(req?.params?.id, {
-      include: { model: User, as: "user", attributes: { exclude: "password" } },
+      include: {
+        model: User,
+        as: "user",
+        attributes: { exclude: EXCLUDE_ATTR },
+      },
     });
 
     res.status(200).send(message);

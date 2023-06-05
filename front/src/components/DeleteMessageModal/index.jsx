@@ -10,12 +10,13 @@ import {
   Button,
   useDisclosure,
   useToast,
+  Box,
 } from "@chakra-ui/react";
 
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useDeleteMessage } from "hooks/messages";
 
-export default ({ id, title }) => {
+export default ({ message }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast();
@@ -25,7 +26,7 @@ export default ({ id, title }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    deleteMessage(id, {
+    deleteMessage(message?.id, {
       onSuccess: () => {
         toast({
           title: "Sucessfully deleted message.",
@@ -47,17 +48,23 @@ export default ({ id, title }) => {
 
   return (
     <>
-      <DeleteIcon
-        _hover={{ cursor: "pointer" }}
-        marginRight="10px"
+      <Box
+        padding=".5em"
+        borderRadius="50%"
+        transition=".25s ease"
+        _hover={{ cursor: "pointer", color: "red.400", bg: "blue.700" }}
         onClick={onOpen}
-      />
+      >
+        <DeleteIcon minH="25px" minW="25px" />
+      </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <form onSubmit={onSubmit}>
           <ModalContent padding="10px">
-            <ModalHeader>Are you sure you want to delete {title}?</ModalHeader>
+            <ModalHeader>
+              Are you sure you want to delete {message?.title}?
+            </ModalHeader>
             <ModalCloseButton />
 
             <ModalFooter>

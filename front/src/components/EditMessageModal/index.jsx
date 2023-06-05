@@ -18,14 +18,15 @@ import {
   Input,
   useDisclosure,
   useToast,
+  Box,
 } from "@chakra-ui/react";
 
 import { EditIcon } from "@chakra-ui/icons";
 
-import { messageSchema } from "../validationRules";
+import { messageSchema } from "views/Messages/validationRules";
 import { useEditMessage } from "hooks/messages";
 
-export default ({ id, message }) => {
+export default ({ message }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     register,
@@ -42,7 +43,7 @@ export default ({ id, message }) => {
   const editMessage = useEditMessage();
 
   const onSubmit = (data) => {
-    editMessage(id, data, {
+    editMessage(message?.id, data, {
       onSuccess: () => {
         toast({
           title: "Sucessfully edited message.",
@@ -66,11 +67,15 @@ export default ({ id, message }) => {
 
   return (
     <>
-      <EditIcon
-        margin="0 10px"
-        _hover={{ cursor: "pointer" }}
+      <Box
+        padding=".5em"
+        borderRadius="50%"
+        transition=".25s ease"
+        _hover={{ cursor: "pointer", color: "yellow.400", bg: "blue.700" }}
         onClick={onOpen}
-      />
+      >
+        <EditIcon minW="25px" minH="25px" />
+      </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -86,6 +91,7 @@ export default ({ id, message }) => {
                   type="text"
                   placeholder="This is a title"
                   maxLength={255}
+                  defaultValue={message?.title}
                 />
                 <FormErrorMessage>{errors?.title?.message}</FormErrorMessage>
               </FormControl>
@@ -95,6 +101,7 @@ export default ({ id, message }) => {
                   {...register("body")}
                   type="text"
                   placeholder="Lorem ipsum..."
+                  defaultValue={message?.body}
                 />
               </FormControl>
               <FormErrorMessage>{errors?.body?.message}</FormErrorMessage>

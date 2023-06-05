@@ -91,8 +91,6 @@ export default () => {
           <NavLink to="/register">
             <Text
               color="gray.600"
-              transition=".25s ease"
-              textDecoration="underline"
               _hover={{ color: "gray.700" }}
             >
               Don't have an account? Click here

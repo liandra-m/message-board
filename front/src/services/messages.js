@@ -2,12 +2,15 @@ import api from "./api";
 
 const BASE_PATH = "/messages";
 
-const GET_MESSAGES = async () => {
-  const { data } = await api.get(BASE_PATH);
+const GET_MESSAGES = async (filters) => {
+  const { data } = await api.get(BASE_PATH, {
+    params: filters
+  });
   return data;
 };
 
 const CREATE_MESSAGE = async (payload) => {
+  console.log(payload);
   const { data } = await api.post(BASE_PATH, payload);
   return data;
 };

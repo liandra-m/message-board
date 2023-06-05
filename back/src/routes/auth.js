@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Message = require("../models/message");
 
 router.post("/login", async (req, res) => {
   try {
@@ -16,12 +17,15 @@ router.post("/login", async (req, res) => {
 
     const token = generateJWTToken(user);
 
-    return res
-      .status(200)
-      .send({
-        user: { id: user?.id, name: user?.name, email: user?.email },
-        token,
-      });
+    return res.status(200).send({
+      user: {
+        id: user?.id,
+        name: user?.name,
+        email: user?.email,
+        createdAt: user?.createdAt,
+      },
+      token,
+    });
   } catch (error) {
     return res.status(500).send("An error has occurred!");
   }
@@ -44,12 +48,15 @@ router.post("/register", async (req, res) => {
 
     const token = generateJWTToken(user);
 
-    return res
-      .status(201)
-      .send({
-        user: { id: user?.id, name: user?.name, email: user?.email },
-        token,
-      });
+    return res.status(201).send({
+      user: {
+        id: user?.id,
+        name: user?.name,
+        email: user?.email,
+        createdAt: user?.createdAt,
+      },
+      token,
+    });
   } catch (error) {
     return res.status(500).send("An error has occurred!");
   }
@@ -58,8 +65,17 @@ router.post("/register", async (req, res) => {
 router.post("/me", async (req, res) => {
   try {
     const token = req.headers["authorization"]?.replace("Bearer ", "");
+    const decodedToken = jwt.decode(token);
 
-    return res.status(200).send(jwt.decode(token));
+    const user = await User.findByPk(decodedToken?.id, {
+      include: {
+        model: Message,
+        as: "messages",
+        attributes: { exclude: "password" },
+      },
+    });
+
+    return res.status(200).send(user);
   } catch (error) {
     return res.status(500).send("An error has occurred!");
   }

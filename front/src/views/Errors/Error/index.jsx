@@ -1,11 +1,11 @@
 import { Center, Flex, Heading, Link, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 
-export default ({ statusCode, message }) => {
+export default ({ statusCode, message, redirectTo }) => {
   const navigate = useNavigate();
 
   if (statusCode.toString().startsWith("40"))
-    setTimeout(() => navigate("/messages"), 5000);
+    setTimeout(() => navigate(redirectTo), 5000);
 
   return (
     <Center h="100vh">
@@ -22,7 +22,7 @@ export default ({ statusCode, message }) => {
           </Text>
         )}
         <Link
-          href="/messages"
+          href={redirectTo}
           color="gray.600"
           transition=".25s ease"
           _hover={{ color: "gray.700" }}

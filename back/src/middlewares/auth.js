@@ -21,7 +21,7 @@ const verifyJWTToken = (req, res, next) => {
   try {
     jwt.verify(token, process.env.JWT_SECRET_KEY);
   } catch (error) {
-    return res.status(401).send("Invalid token");
+    return res.status(401).send("Invalid token!");
   }
 
   return next();

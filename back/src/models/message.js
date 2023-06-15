@@ -15,6 +15,9 @@ const Message = sequelize.define("message", {
   body: {
     type: DataTypes.TEXT,
   },
+  likes: {
+    type: DataTypes.INTEGER,
+  },
 });
 
 Message.belongsTo(User, { foreignKey: "user_id", as: "user" });

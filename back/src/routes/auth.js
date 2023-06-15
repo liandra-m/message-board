@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Message = require("../models/message");
 
+const jwtKey = process.env.JWT_SECRET_KEY;
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -65,6 +67,9 @@ router.post("/register", async (req, res) => {
 router.post("/me", async (req, res) => {
   try {
     const token = req.headers["authorization"]?.replace("Bearer ", "");
+
+    await jwt.verify(token, jwtKey);
+
     const decodedToken = jwt.decode(token);
 
     const user = await User.findByPk(decodedToken?.id, {
@@ -77,6 +82,8 @@ router.post("/me", async (req, res) => {
 
     return res.status(200).send(user);
   } catch (error) {
+    if (error?.name === "TokenExpiredError")
+      return res.status(401).send("Token expired!");
     return res.status(500).send("An error has occurred!");
   }
 });
@@ -84,7 +91,7 @@ router.post("/me", async (req, res) => {
 const generateJWTToken = (user) => {
   return jwt.sign(
     { id: user?.id, email: user?.email, name: user?.name },
-    process.env.JWT_SECRET_KEY,
+    jwtKey,
     {
       expiresIn: "1h",
     }

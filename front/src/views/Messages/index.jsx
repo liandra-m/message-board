@@ -9,6 +9,7 @@ import { useGetMessages } from "hooks/messages";
 import { useAuth } from "hooks/auth";
 
 import MessageCard from "../../components/MessageCard";
+import LoadingMessageCard from "components/LoadingMessageCard";
 
 export default () => {
   const { me: user, loading: loadingUser } = useAuth();
@@ -30,9 +31,7 @@ export default () => {
         <Flex w="75%" m="1em 2.5em" direction="column">
           <AddMessage />
           {loading || loadingUser ? (
-            <Box padding="6" boxShadow="lg" bg="white">
-              <SkeletonText mt="4" noOfLines={4} spacing="4" />
-            </Box>
+            <LoadingMessageCard />
           ) : messages && messages.length > 0 ? (
             messages.map((message) => {
               return <MessageCard user={user} message={message} />;

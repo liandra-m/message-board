@@ -1,4 +1,4 @@
-import { Text, Heading, Box, Flex } from "@chakra-ui/react";
+import { Text, Heading, Flex } from "@chakra-ui/react";
 
 import { getRelativeTime } from "functions/date";
 

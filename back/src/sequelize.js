@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize");
+const loadModels = require("./database");
 
 const sequelize = new Sequelize(
   process.env.DB,
@@ -12,6 +13,7 @@ const sequelize = new Sequelize(
 
 const startDatabase = async () => {
   authenticate();
+  loadModels();
   sync();
 };
 
@@ -28,7 +30,7 @@ const authenticate = async () => {
 
 const sync = async () => {
   try {
-    const response = await sequelize.sync({ alter: true });
+    await sequelize.sync({ alter: true });
     console.log("Sucessfully synced database models");
   } catch (error) {
     console.error(`An error occurred while trying to sync database ${error}`);

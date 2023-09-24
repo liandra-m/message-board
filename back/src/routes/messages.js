@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Message = require("../models/message");
-const User = require("../models/user");
+const Message = require("../database/models/message");
+const User = require("../database/models/user");
 
 const BASE_PATH = "/messages";
 const EXCLUDE_ATTR = ["password", "email"];

@@ -17,7 +17,7 @@ export default () => {
   ] = useGetMessages();
 
   const handleMessages = async () => {
-    await getMessages({ user_id: user?.id });
+    await getMessages({ userId: user?.id });
   };
 
   useEffect(() => {

@@ -47,7 +47,7 @@ export default ({ message = {}, user = {}, profile = false }) => {
           )}
         </Flex>
 
-        {user && user?.id === message?.user_id && (
+        {user && user?.id === message?.userId && (
           <Flex gap="7px">
             <EditMessageModal message={message} />
             <DeleteMessageModal message={message} />

@@ -21,7 +21,7 @@ const startServer = () => {
   const jsonParser = bodyParser.json();
   app.use(jsonParser);
   app.use(authMiddleware);
-
+  
   app.use(messageRoutes);
   app.use(authRoutes);
 

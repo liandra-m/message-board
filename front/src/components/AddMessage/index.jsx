@@ -37,7 +37,7 @@ export default () => {
   const { me: user } = useAuth();
 
   const onSubmit = (data) => {
-    data.user_id = user?.id;
+    data.userId = user?.id;
 
     addMessage(data, {
       onSuccess: () => {

@@ -42,10 +42,6 @@ router.get(BASE_PATH, async (req, res) => {
       where: req?.query || {},
     });
 
-    messages.map((message) => {
-      message.likes = message.likes.length || 0;
-    });
-
     res.status(200).send(messages);
   } catch (error) {
     res.status(500).send("Unable to retrieve messages" + error);

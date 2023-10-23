@@ -76,7 +76,10 @@ export const useGetMessages = () => {
 export const useAddMessage = () => {
   const dispatch = useDispatch();
 
-  const addMessage = async (message, options = {}) => {
+  const addMessage = async (
+    message,
+    options = { onSuccess: () => {}, onError: () => {} }
+  ) => {
     const { onSuccess, onError } = options;
 
     try {
@@ -99,7 +102,11 @@ export const useAddMessage = () => {
 export const useEditMessage = () => {
   const dispatch = useDispatch();
 
-  const editMessage = async (id, message, options = {}) => {
+  const editMessage = async (
+    id,
+    message,
+    options = { onSuccess: () => {}, onError: () => {} }
+  ) => {
     const { onSuccess, onError } = options;
     try {
       const response = await EDIT_MESSAGE(id, message);
@@ -121,7 +128,10 @@ export const useEditMessage = () => {
 export const useDeleteMessage = () => {
   const dispatch = useDispatch();
 
-  const deleteMessage = async (id, options = {}) => {
+  const deleteMessage = async (
+    id,
+    options = { onSuccess: () => {}, onError: () => {} }
+  ) => {
     const { onSuccess, onError } = options;
 
     try {
@@ -144,7 +154,10 @@ export const useDeleteMessage = () => {
 export const useLikeMessage = () => {
   const dispatch = useDispatch();
 
-  const likeMessage = async (id, options = {}) => {
+  const likeMessage = async (
+    id,
+    options = { onSuccess: () => {}, onError: () => {} }
+  ) => {
     const { onSuccess, onError } = options;
 
     try {
@@ -152,7 +165,7 @@ export const useLikeMessage = () => {
 
       onSuccess();
     } catch (error) {
-      onError();
+      onError(error);
     }
   };
 

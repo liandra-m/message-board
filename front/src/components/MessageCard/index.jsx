@@ -8,10 +8,13 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useLikeMessage } from "hooks/messages";
 import { useAuth } from "hooks/auth";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 export default ({ message = {}, user = {}, profile = false }) => {
   const likeMessage = useLikeMessage();
   const [isLiked, setLiked] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     message?.likes?.find((l) => {
@@ -85,6 +88,9 @@ export default ({ message = {}, user = {}, profile = false }) => {
                       ? (message.like_count -= 1)
                       : (message.like_count += 1);
                     setLiked((isLiked) => !isLiked);
+                  },
+                  onError: (error) => {
+                    if (error?.response?.status === 401) navigate("/login");
                   },
                 })
               }

@@ -1,11 +1,24 @@
-import { Text, Heading, Flex } from "@chakra-ui/react";
+import { Text, Heading, Flex, Icon, Box, IconButton } from "@chakra-ui/react";
 
 import { getRelativeTime } from "functions/date";
 
 import DeleteMessageModal from "components/DeleteMessageModal";
 import EditMessageModal from "components/EditMessageModal";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useLikeMessage } from "hooks/messages";
+import { useAuth } from "hooks/auth";
+import { useState, useEffect } from "react";
 
 export default ({ message = {}, user = {}, profile = false }) => {
+  const likeMessage = useLikeMessage();
+  const [isLiked, setLiked] = useState(false);
+
+  useEffect(() => {
+    message?.likes?.find((l) => {
+      if (l?.userId === user?.id) setLiked(true);
+    });
+  }, []);
+
   return (
     <Flex
       key={message.id}
@@ -47,12 +60,38 @@ export default ({ message = {}, user = {}, profile = false }) => {
           )}
         </Flex>
 
-        {user && user?.id === message?.userId && (
-          <Flex gap="7px">
-            <EditMessageModal message={message} />
-            <DeleteMessageModal message={message} />
-          </Flex>
-        )}
+        <Flex align="center" gap="12px">
+          {user && user?.id === message?.userId && (
+            <>
+              <EditMessageModal message={message} />
+              <DeleteMessageModal message={message} />
+            </>
+          )}
+
+          <Box
+            borderRadius="50%"
+            transition=".25s ease"
+            _hover={{ cursor: "pointer", color: "yellow.400", bg: "blue.700" }}
+          >
+            <IconButton
+              icon={isLiked ? <FaHeart size={24} /> : <FaRegHeart size={22} />}
+              background="transparent"
+              _hover={{ background: "transparent" }}
+              _active={{ background: "transparent" }}
+              onClick={() =>
+                likeMessage(message?.id, {
+                  onSuccess: () => {
+                    isLiked
+                      ? (message.like_count -= 1)
+                      : (message.like_count += 1);
+                    setLiked((isLiked) => !isLiked);
+                  },
+                })
+              }
+            />
+          </Box>
+          <Text>{message?.like_count}</Text>
+        </Flex>
       </Flex>
     </Flex>
   );

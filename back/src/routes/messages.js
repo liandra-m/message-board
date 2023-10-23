@@ -31,7 +31,7 @@ router.get(BASE_PATH, async (req, res) => {
         {
           model: Like,
           as: "likes",
-          attributes: ["createdAt"],
+          attributes: ["userId", "createdAt"],
         },
       ],
       group: ["id", "likes.userId"],

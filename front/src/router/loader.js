@@ -11,5 +11,7 @@ export const loader = async (req) => {
   if ((user && (url === "/login" || url === "/register")) || url === "/")
     return redirect("/messages");
 
+  if (!user && url === "/profile") return redirect("/login");
+
   return null;
 };

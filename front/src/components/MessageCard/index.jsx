@@ -4,15 +4,17 @@ import { getRelativeTime } from "functions/date";
 
 import DeleteMessageModal from "components/DeleteMessageModal";
 import EditMessageModal from "components/EditMessageModal";
+
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useLikeMessage } from "hooks/messages";
-import { useAuth } from "hooks/auth";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default ({ message = {}, user = {}, profile = false }) => {
   const likeMessage = useLikeMessage();
+
   const [isLiked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(message?.likes?.length);
 
   const navigate = useNavigate();
 
@@ -85,8 +87,8 @@ export default ({ message = {}, user = {}, profile = false }) => {
                 likeMessage(message?.id, {
                   onSuccess: () => {
                     isLiked
-                      ? (message.like_count -= 1)
-                      : (message.like_count += 1);
+                      ? setLikeCount((likeCount) => likeCount - 1)
+                      : setLikeCount((likeCount) => likeCount + 1);
                     setLiked((isLiked) => !isLiked);
                   },
                   onError: (error) => {
@@ -96,7 +98,7 @@ export default ({ message = {}, user = {}, profile = false }) => {
               }
             />
           </Box>
-          <Text>{message?.like_count}</Text>
+          <Text>{likeCount}</Text>
         </Flex>
       </Flex>
     </Flex>

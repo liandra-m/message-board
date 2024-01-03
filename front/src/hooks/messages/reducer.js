@@ -12,7 +12,7 @@ export default function messageReducer(state, action) {
       };
 
     case "EDIT_MESSAGE":
-      const updatedMessage = state.messages.map((message) => {
+      const updatedMessages = state.messages.map((message) => {
         if (message.id === action.payload.id) {
           return action.payload;
         }
@@ -22,7 +22,7 @@ export default function messageReducer(state, action) {
 
       return {
         ...state,
-        messages: updatedMessage,
+        messages: updatedMessages,
       };
 
     case "DELETE_MESSAGE":
@@ -31,6 +31,30 @@ export default function messageReducer(state, action) {
         messages: state.messages.filter(
           (message) => message.id !== action.payload
         ),
+      };
+
+    case "LIKE_MESSAGE":
+      const likedMessages = state.messages.map((message) => {
+        if (message.id === parseInt(action.payload.messageId)) {
+          if (action.payload.status === "like") {
+            return {
+              ...message,
+              likes: [...message.likes, action.payload],
+            };
+          } else {
+            return {
+              ...message,
+              likes: message.likes.slice(0, -1),
+            };
+          }
+        }
+
+        return message;
+      });
+
+      return {
+        ...state,
+        messages: likedMessages,
       };
 
     default:

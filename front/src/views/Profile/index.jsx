@@ -1,4 +1,4 @@
-import { Avatar, Box, Center, Flex, Text, VStack } from "@chakra-ui/react";
+import { Avatar, Box, Center, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
 import MessageCard from "components/MessageCard";
 
 import NavBar from "components/NavBar";
@@ -17,7 +17,7 @@ export default () => {
   ] = useGetMessages();
 
   const handleMessages = async () => {
-    await getMessages({ user_id: user?.id });
+    await getMessages({ userId: user?.id });
   };
 
   useEffect(() => {
@@ -25,9 +25,13 @@ export default () => {
   }, [user]);
 
   return (
-    <>
+    <Flex direction="column" h="100vh">
       <NavBar />
-      {!loadingUser && !loadingMessages && (
+      {loadingUser || loadingMessages ? 
+        <Center h="100%">
+          <Spinner thickness={6} color="blue.500" w="100px" h="100px"/>
+        </Center>
+      : (
         <Flex justify="space-around" padding="0 10%" bg="gray.100">
           <Flex
             background="blue.500"
@@ -68,8 +72,6 @@ export default () => {
           <Flex
             w="75%"
             direction="column"
-            align="center"
-            justify="center"
           >
             {messages?.map((message) => (
               <MessageCard
@@ -81,6 +83,6 @@ export default () => {
           </Flex>
         </Flex>
       )}
-    </>
+    </Flex>
   );
 };

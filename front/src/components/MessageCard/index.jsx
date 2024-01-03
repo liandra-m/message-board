@@ -1,11 +1,25 @@
-import { Text, Heading, Box, Flex } from "@chakra-ui/react";
+import { Text, Heading, Flex, Icon, Box, IconButton } from "@chakra-ui/react";
 
 import { getRelativeTime } from "functions/date";
 
 import DeleteMessageModal from "components/DeleteMessageModal";
 import EditMessageModal from "components/EditMessageModal";
 
-export default ({ message = {}, user = {}, profile = false }) => {
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useLikeMessage } from "hooks/messages";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+
+export default ({
+  message = {},
+  user = {},
+  profile = false,
+  isLiked = false,
+}) => {
+  const likeMessage = useLikeMessage();
+
+  const navigate = useNavigate();
+
   return (
     <Flex
       key={message.id}
@@ -47,12 +61,35 @@ export default ({ message = {}, user = {}, profile = false }) => {
           )}
         </Flex>
 
-        {user && user?.id === message?.user_id && (
-          <Flex gap="7px">
-            <EditMessageModal message={message} />
-            <DeleteMessageModal message={message} />
-          </Flex>
-        )}
+        <Flex align="center" gap="12px">
+          {user && user?.id === message?.userId && (
+            <>
+              <EditMessageModal message={message} />
+              <DeleteMessageModal message={message} />
+            </>
+          )}
+
+          <Box
+            borderRadius="50%"
+            transition=".25s ease"
+            _hover={{ cursor: "pointer", color: "yellow.400", bg: "blue.700" }}
+          >
+            <IconButton
+              icon={isLiked ? <FaHeart size={24} /> : <FaRegHeart size={22} />}
+              background="transparent"
+              _hover={{ background: "transparent" }}
+              _active={{ background: "transparent" }}
+              onClick={() =>
+                likeMessage(message?.id, {
+                  onError: (error) => {
+                    if (error?.response?.status === 401) navigate("/login");
+                  },
+                })
+              }
+            />
+          </Box>
+          <Text>{message?.likes?.length}</Text>
+        </Flex>
       </Flex>
     </Flex>
   );

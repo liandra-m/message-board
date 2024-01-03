@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user");
+const User = require("../database/models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Message = require("../models/message");
+const Message = require("../database/models/message");
 
 const jwtKey = process.env.JWT_SECRET_KEY;
 

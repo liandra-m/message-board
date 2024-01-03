@@ -10,19 +10,15 @@ import { useLikeMessage } from "hooks/messages";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-export default ({ message = {}, user = {}, profile = false }) => {
+export default ({
+  message = {},
+  user = {},
+  profile = false,
+  isLiked = false,
+}) => {
   const likeMessage = useLikeMessage();
 
-  const [isLiked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(message?.likes?.length);
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    message?.likes?.find((l) => {
-      if (l?.userId === user?.id) setLiked(true);
-    });
-  }, []);
 
   return (
     <Flex
@@ -85,12 +81,6 @@ export default ({ message = {}, user = {}, profile = false }) => {
               _active={{ background: "transparent" }}
               onClick={() =>
                 likeMessage(message?.id, {
-                  onSuccess: () => {
-                    isLiked
-                      ? setLikeCount((likeCount) => likeCount - 1)
-                      : setLikeCount((likeCount) => likeCount + 1);
-                    setLiked((isLiked) => !isLiked);
-                  },
                   onError: (error) => {
                     if (error?.response?.status === 401) navigate("/login");
                   },
@@ -98,7 +88,7 @@ export default ({ message = {}, user = {}, profile = false }) => {
               }
             />
           </Box>
-          <Text>{likeCount}</Text>
+          <Text>{message?.likes?.length}</Text>
         </Flex>
       </Flex>
     </Flex>

@@ -161,7 +161,12 @@ export const useLikeMessage = () => {
     const { onSuccess, onError } = options;
 
     try {
-      await LIKE_MESSAGE(id);
+      const response = await LIKE_MESSAGE(id);
+
+      dispatch({
+        type: "LIKE_MESSAGE",
+        payload: response,
+      });
 
       onSuccess();
     } catch (error) {

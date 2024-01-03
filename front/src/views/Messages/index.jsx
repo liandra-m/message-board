@@ -34,7 +34,15 @@ export default () => {
             <LoadingMessageCard />
           ) : messages && messages.length > 0 ? (
             messages.map((message) => {
-              return <MessageCard user={user} message={message} />;
+              return (
+                <MessageCard
+                  user={user}
+                  message={message}
+                  isLiked={message?.likes?.find((l) => {
+                    if (l?.userId === user?.id) return true;
+                  })}
+                />
+              );
             })
           ) : (
             <Box>

@@ -10,6 +10,7 @@ import {
   CREATE_MESSAGE,
   DELETE_MESSAGE,
   EDIT_MESSAGE,
+  LIKE_MESSAGE,
 } from "services/messages";
 
 import messageReducer from "./reducer";
@@ -75,7 +76,10 @@ export const useGetMessages = () => {
 export const useAddMessage = () => {
   const dispatch = useDispatch();
 
-  const addMessage = async (message, options) => {
+  const addMessage = async (
+    message,
+    options = { onSuccess: () => {}, onError: () => {} }
+  ) => {
     const { onSuccess, onError } = options;
 
     try {
@@ -98,7 +102,11 @@ export const useAddMessage = () => {
 export const useEditMessage = () => {
   const dispatch = useDispatch();
 
-  const editMessage = async (id, message, options) => {
+  const editMessage = async (
+    id,
+    message,
+    options = { onSuccess: () => {}, onError: () => {} }
+  ) => {
     const { onSuccess, onError } = options;
     try {
       const response = await EDIT_MESSAGE(id, message);
@@ -120,11 +128,14 @@ export const useEditMessage = () => {
 export const useDeleteMessage = () => {
   const dispatch = useDispatch();
 
-  const deleteMessage = async (id, options) => {
+  const deleteMessage = async (
+    id,
+    options = { onSuccess: () => {}, onError: () => {} }
+  ) => {
     const { onSuccess, onError } = options;
 
     try {
-      const response = await DELETE_MESSAGE(id);
+      await DELETE_MESSAGE(id);
 
       dispatch({
         type: "DELETE_MESSAGE",
@@ -138,4 +149,30 @@ export const useDeleteMessage = () => {
   };
 
   return deleteMessage;
+};
+
+export const useLikeMessage = () => {
+  const dispatch = useDispatch();
+
+  const likeMessage = async (
+    id,
+    options = { onSuccess: () => {}, onError: () => {} }
+  ) => {
+    const { onSuccess, onError } = options;
+
+    try {
+      const response = await LIKE_MESSAGE(id);
+
+      dispatch({
+        type: "LIKE_MESSAGE",
+        payload: response,
+      });
+
+      onSuccess();
+    } catch (error) {
+      onError(error);
+    }
+  };
+
+  return likeMessage;
 };

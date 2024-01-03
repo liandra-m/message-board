@@ -4,7 +4,7 @@ const BASE_PATH = "/messages";
 
 const GET_MESSAGES = async (filters) => {
   const { data } = await api.get(BASE_PATH, {
-    params: filters
+    params: filters,
   });
   return data;
 };
@@ -25,4 +25,15 @@ const DELETE_MESSAGE = async (id) => {
   return data;
 };
 
-export { GET_MESSAGES, CREATE_MESSAGE, EDIT_MESSAGE, DELETE_MESSAGE };
+const LIKE_MESSAGE = async (id) => {
+  const { data } = await api.post(`${BASE_PATH}/like/${id}`);
+  return data;
+};
+
+export {
+  GET_MESSAGES,
+  CREATE_MESSAGE,
+  EDIT_MESSAGE,
+  DELETE_MESSAGE,
+  LIKE_MESSAGE,
+};

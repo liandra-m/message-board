@@ -34,7 +34,7 @@ router.get(BASE_PATH, async (req, res) => {
           attributes: ["userId", "createdAt"],
         },
       ],
-      group: ["id", "likes.userId"],
+      group: ["id", "likes.userId", "likes.createdAt"],
       order: [
         ["createdAt", "DESC"],
         ["updatedAt", "DESC"],

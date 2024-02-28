@@ -34,7 +34,7 @@ router.get(BASE_PATH, async (req, res) => {
           attributes: ["userId", "createdAt"],
         },
       ],
-      group: ["id", "likes.userId"],
+      group: ["id", "likes.userId", "likes.createdAt"],
       order: [
         ["createdAt", "DESC"],
         ["updatedAt", "DESC"],
@@ -112,11 +112,17 @@ router.post(`${BASE_PATH}/like/:id`, async (req, res) => {
       where: { userId: decodedToken?.id, messageId: req.params.id },
     });
 
-    if (likeExists) await likeExists.destroy();
-    else
-      await Like.create({ userId: decodedToken?.id, messageId: req.params.id });
+    const ret = { messageId: req.params.id, userId: decodedToken.id };
 
-    res.status(200).send("Sucessfully liked or unliked the message!");
+    if (likeExists) {
+      await likeExists.destroy();
+      ret.status = "unlike";
+    } else {
+      await Like.create({ userId: decodedToken?.id, messageId: req.params.id });
+      ret.status = "like";
+    }
+
+    res.status(200).send(ret);
   } catch (error) {
     res.status(500).send("Unable to like message at this point!");
   }

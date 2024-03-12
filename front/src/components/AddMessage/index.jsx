@@ -19,6 +19,7 @@ import {
 import { messageSchema } from "../../views/Messages/validationRules";
 import { useAddMessage } from "hooks/messages";
 import { useAuth } from "hooks/auth";
+import { FaAmilia, FaMailBulk, FaMailchimp } from "react-icons/fa";
 
 export default () => {
   const {
@@ -65,7 +66,7 @@ export default () => {
     <Flex
       position="relative"
       bg="white"
-      margin="1em"
+      margin="1em 0"
       padding={{ base: "1em", lg: "2.25em" }}
       borderRadius="12px"
       justify="center"

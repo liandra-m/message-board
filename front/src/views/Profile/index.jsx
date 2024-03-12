@@ -1,4 +1,12 @@
-import { Avatar, Box, Center, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Center,
+  Flex,
+  Spinner,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import MessageCard from "components/MessageCard";
 
 import NavBar from "components/NavBar";
@@ -27,11 +35,11 @@ export default () => {
   return (
     <Flex direction="column" h="100vh">
       <NavBar />
-      {loadingUser || loadingMessages ? 
+      {loadingUser || loadingMessages ? (
         <Center h="100%">
-          <Spinner thickness={6} color="blue.500" w="100px" h="100px"/>
+          <Spinner thickness={6} color="blue.500" w="100px" h="100px" />
         </Center>
-      : (
+      ) : (
         <Flex justify="space-around" padding="0 10%" bg="gray.100">
           <Flex
             background="blue.500"
@@ -69,14 +77,14 @@ export default () => {
               </Flex>
             </VStack>
           </Flex>
-          <Flex
-            w="75%"
-            direction="column"
-          >
+          <Flex w="75%" direction="column">
             {messages?.map((message) => (
               <MessageCard
                 message={message}
                 user={{ id: user?.id, name: user?.name }}
+                isLiked={message?.likes?.find((l) => {
+                  if (l?.userId === user?.id) return true;
+                })}
                 profile
               />
             ))}

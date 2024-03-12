@@ -1,4 +1,4 @@
-import { Text, Heading, Flex, Icon, Box, IconButton } from "@chakra-ui/react";
+import { Text, Heading, Flex, Box, IconButton } from "@chakra-ui/react";
 
 import { getRelativeTime } from "functions/date";
 
@@ -7,8 +7,8 @@ import EditMessageModal from "components/EditMessageModal";
 
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useLikeMessage } from "hooks/messages";
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import ActionButton from "components/ActionButton";
 
 export default ({
   message = {},
@@ -42,22 +42,19 @@ export default ({
         textAlign="right"
         justify="space-between"
         align="center"
-        bg="blue.500"
         w="100%"
-        color="white"
+        color="gray.700"
         padding="0.5em 1em"
         borderBottomRadius="10px"
       >
-        <Flex gap="30px" align="center">
-          <Text color="gray.100">
+        <Flex gap="30px" align="center" color="gray.600">
+          <Text>
             Written by{" "}
             {(profile && user?.name) || message?.user?.name || "Guest"}{" "}
             {getRelativeTime(message?.createdAt)}
           </Text>
           {message?.updatedAt !== message?.createdAt && (
-            <Text color="gray.100">
-              Updated {getRelativeTime(message?.updatedAt)}
-            </Text>
+            <Text>Updated {getRelativeTime(message?.updatedAt)}</Text>
           )}
         </Flex>
 
@@ -69,25 +66,20 @@ export default ({
             </>
           )}
 
-          <Box
-            borderRadius="50%"
-            transition=".25s ease"
-            _hover={{ cursor: "pointer", color: "yellow.400", bg: "blue.700" }}
-          >
-            <IconButton
-              icon={isLiked ? <FaHeart size={24} /> : <FaRegHeart size={22} />}
-              background="transparent"
-              _hover={{ background: "transparent" }}
-              _active={{ background: "transparent" }}
-              onClick={() =>
-                likeMessage(message?.id, {
-                  onError: (error) => {
-                    if (error?.response?.status === 401) navigate("/login");
-                  },
-                })
-              }
-            />
-          </Box>
+          <ActionButton
+            hoverColor="red.500"
+            icon={<FaRegHeart size={24} />}
+            altIcon={<FaHeart size={22} />}
+            isActive={isLiked}
+            onClick={() =>
+              likeMessage(message?.id, {
+                onError: (error) => {
+                  if (error?.response?.status === 401) navigate("/login");
+                },
+              })
+            }
+          />
+
           <Text>{message?.likes?.length}</Text>
         </Flex>
       </Flex>

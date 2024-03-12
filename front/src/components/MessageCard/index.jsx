@@ -10,12 +10,7 @@ import { useLikeMessage } from "hooks/messages";
 import { useNavigate } from "react-router";
 import ActionButton from "components/ActionButton";
 
-export default ({
-  message = {},
-  user = {},
-  profile = false,
-  isLiked = false,
-}) => {
+export default ({ message = {}, user = {}, isLiked = false }) => {
   const likeMessage = useLikeMessage();
 
   const navigate = useNavigate();
@@ -50,7 +45,9 @@ export default ({
         <Flex gap="30px" align="center" color="gray.600">
           <Text>
             Written by{" "}
-            {(profile && user?.name) || message?.user?.name || "Guest"}{" "}
+            {user?.id === message?.user?.id
+              ? "You"
+              : message?.user?.name || "Guest"}{" "}
             {getRelativeTime(message?.createdAt)}
           </Text>
           {message?.updatedAt !== message?.createdAt && (

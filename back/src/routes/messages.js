@@ -10,6 +10,19 @@ const BASE_PATH = "/messages";
 const EXCLUDE_ATTR = ["password", "email"];
 const jwtKey = process.env.JWT_SECRET_KEY;
 
+const includeUserAndLikes = [
+  {
+    model: User,
+    as: "user",
+    attributes: { exclude: EXCLUDE_ATTR },
+  },
+  {
+    model: Like,
+    as: "likes",
+    attributes: ["userId", "createdAt"],
+  },
+];
+
 router.get(BASE_PATH, async (req, res) => {
   try {
     const messages = await Message.findAll({
@@ -22,18 +35,7 @@ router.get(BASE_PATH, async (req, res) => {
         "userId",
         [sequelize.fn("COUNT", sequelize.col("likes.messageId")), "like_count"],
       ],
-      include: [
-        {
-          model: User,
-          as: "user",
-          attributes: { exclude: EXCLUDE_ATTR },
-        },
-        {
-          model: Like,
-          as: "likes",
-          attributes: ["userId", "createdAt"],
-        },
-      ],
+      include: includeUserAndLikes,
       group: ["id", "likes.userId", "likes.createdAt"],
       order: [
         ["createdAt", "DESC"],
@@ -53,11 +55,7 @@ router.post(BASE_PATH, async (req, res) => {
     const newMessage = await Message.create(req.body);
 
     const message = await Message.findByPk(newMessage?.id, {
-      include: {
-        model: User,
-        as: "user",
-        attributes: { exclude: EXCLUDE_ATTR },
-      },
+      include: includeUserAndLikes,
     });
 
     res.status(201).send(message);
@@ -75,11 +73,7 @@ router.put(`${BASE_PATH}/:id`, async (req, res) => {
     });
 
     const message = await Message.findByPk(req?.params?.id, {
-      include: {
-        model: User,
-        as: "user",
-        attributes: { exclude: EXCLUDE_ATTR },
-      },
+      include: includeUserAndLikes,
     });
 
     res.status(200).send(message);

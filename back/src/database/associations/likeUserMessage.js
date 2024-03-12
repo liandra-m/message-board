@@ -4,3 +4,6 @@ const Like = require("../models/like");
 
 Message.belongsToMany(User, { through: Like });
 User.belongsToMany(Message, { through: Like });
+
+Like.belongsTo(User);
+Like.belongsTo(Message);

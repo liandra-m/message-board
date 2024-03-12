@@ -24,6 +24,7 @@ const includeUserAndLikes = [
 ];
 
 router.get(BASE_PATH, async (req, res) => {
+  console.log(req.query);
   try {
     const messages = await Message.findAll({
       attributes: [
@@ -45,6 +46,48 @@ router.get(BASE_PATH, async (req, res) => {
     });
 
     res.status(200).send(messages);
+  } catch (error) {
+    res.status(500).send("Unable to retrieve messages");
+  }
+});
+
+router.get(`${BASE_PATH}/likedMessages`, async (req, res) => {
+  try {
+    const token = req.headers["authorization"]?.replace("Bearer ", "");
+    await jwt.verify(token, jwtKey);
+    const user = jwt.decode(token)?.id;
+
+    const likedMessages = await Message.findAll({
+      attributes: [
+        "id",
+        "title",
+        "body",
+        "createdAt",
+        "updatedAt",
+        "userId",
+        [sequelize.fn("COUNT", sequelize.col("likes.messageId")), "like_count"],
+      ],
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: { exclude: EXCLUDE_ATTR },
+        },
+        {
+          model: Like,
+          as: "likes",
+          where: { userId: 3 }, // Filter likes by userId = 3
+          required: true, // Use inner join to get only the liked messages
+        },
+      ],
+      group: ["id", "likes.userId", "likes.createdAt"],
+      order: [
+        ["createdAt", "DESC"],
+        ["updatedAt", "DESC"],
+      ],
+    });
+
+    res.status(200).send(likedMessages);
   } catch (error) {
     res.status(500).send("Unable to retrieve messages" + error);
   }

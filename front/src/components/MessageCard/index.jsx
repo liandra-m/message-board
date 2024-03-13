@@ -36,13 +36,19 @@ export default ({ message = {}, user = {}, isLiked = false }) => {
         marginTop="1em"
         textAlign="right"
         justify="space-between"
-        align="center"
         w="100%"
         color="gray.700"
         padding="0.5em 1em"
         borderBottomRadius="10px"
+        direction={{ base: "column", md: "row" }}
       >
-        <Flex gap="30px" align="center" color="gray.600">
+        <Flex
+          gap={{ base: "12px", md: "30px" }}
+          align="start"
+          color="gray.600"
+          direction={{ base: "column", sm: "row" }}
+          marginY="12px"
+        >
           <Text>
             Written by{" "}
             {user?.id === message?.user?.id
@@ -55,7 +61,7 @@ export default ({ message = {}, user = {}, isLiked = false }) => {
           )}
         </Flex>
 
-        <Flex align="center" gap="12px">
+        <Flex align="center" justify={{ base: "end", md: "center" }} gap="12px">
           {user && user?.id === message?.userId && (
             <>
               <EditMessageModal message={message} />

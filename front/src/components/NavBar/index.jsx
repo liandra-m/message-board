@@ -9,6 +9,7 @@ import {
   MenuItem,
   MenuList,
   Text,
+  useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
 import { FaPaperPlane, FaUserAlt } from "react-icons/fa";
@@ -26,6 +27,7 @@ export default () => {
   const logout = useLogout();
   const navigate = useNavigate();
   const toast = useToast();
+  const [isSmallerThanBreakpoint] = useMediaQuery("min-width: 512px");
 
   const handleLogout = async () => {
     logout({
@@ -53,18 +55,22 @@ export default () => {
   return (
     <Box
       w="100%"
-      minH="50px"
+      h="90px"
       bg="blue.500"
       padding="1em"
       color="white"
       justify="center"
       align="center"
     >
-      <Flex align="center" justify="space-between" w="75%">
+      <Flex
+        align="center"
+        justify="space-between"
+        w={{ base: "90%", md: "75%" }}
+      >
         <NavLink to="/messages" _hover={{ cursor: "pointer" }}>
           <Flex align="center" gap="16px">
             <FaPaperPlane size={32} />
-            <Text fontWeight="bold" fontSize="24px">
+            <Text fontWeight="bold" fontSize={{ base: "20px", sm: "24px" }}>
               Message Board
             </Text>
           </Flex>

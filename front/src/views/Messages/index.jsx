@@ -28,7 +28,7 @@ export default () => {
     <>
       <NavBar />
       <Flex direction="column" align="center" justify="center">
-        <Flex w="75%" m="1em 2.5em" direction="column">
+        <Flex w={{ base: "90%", md: "75%" }} m="1em 2.5em" direction="column">
           <AddMessage />
           {loading || loadingUser ? (
             <LoadingMessageCard />

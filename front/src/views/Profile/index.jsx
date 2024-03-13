@@ -29,11 +29,16 @@ export default () => {
           <Spinner thickness={6} color="blue.500" w="100px" h="100px" />
         </Center>
       ) : (
-        <Flex justify="space-around" padding="0 10%" bg="gray.100">
+        <Flex
+          justify="space-around"
+          padding="0 10%"
+          bg="gray.100"
+          direction={{ base: "column", md: "row" }}
+        >
           <Flex
             background="blue.500"
             h="fit-content"
-            w="25%"
+            minW={{ base: "125px", sm: "250px", lg: "325px" }}
             m="1em 2.5em"
             direction="column"
             align="center"

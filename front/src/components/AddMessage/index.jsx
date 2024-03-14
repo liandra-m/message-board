@@ -13,11 +13,13 @@ import {
   Center,
   FormErrorMessage,
   Flex,
+  Image,
 } from "@chakra-ui/react";
 
 import { messageSchema } from "../../views/Messages/validationRules";
 import { useAddMessage } from "hooks/messages";
 import { useAuth } from "hooks/auth";
+import { FaAmilia, FaMailBulk, FaMailchimp } from "react-icons/fa";
 
 export default () => {
   const {
@@ -62,13 +64,21 @@ export default () => {
 
   return (
     <Flex
+      position="relative"
       bg="white"
-      margin="1em .5em"
-      padding="2em .5em"
+      margin="1em 0"
+      padding={{ base: "1em", lg: "2.25em" }}
       borderRadius="12px"
       justify="center"
+      align="center"
+      gap="32px"
     >
-      <form onSubmit={handleSubmit(onSubmit)} style={{ width: 50 + "%" }}>
+      <Image
+        src="/assets/imgs/messaging.svg"
+        maxW={{ md: "240px", lg: "400px" }}
+        display={{ base: "none", md: "block" }}
+      />
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: 100 + "%" }}>
         <VStack
           spacing="24px"
           justify="center"
@@ -96,7 +106,7 @@ export default () => {
             <FormErrorMessage>{errors?.body?.message}</FormErrorMessage>
           </FormControl>
           <FormControl>
-            <Button colorScheme="blue" type="submit">
+            <Button colorScheme="blue" type="submit" w="100%">
               Add Message
             </Button>
           </FormControl>

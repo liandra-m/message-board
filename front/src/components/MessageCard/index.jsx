@@ -51,7 +51,7 @@ export default ({ message = {}, user = {}, isLiked = false }) => {
         >
           <Text>
             Written by{" "}
-            {user?.id === message?.user?.id
+            {user?.id === message?.userId
               ? "You"
               : message?.user?.name || "Guest"}{" "}
             {getRelativeTime(message?.createdAt)}

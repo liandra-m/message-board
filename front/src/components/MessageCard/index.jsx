@@ -17,7 +17,7 @@ import { useLikeMessage } from "hooks/messages";
 import { useNavigate } from "react-router";
 import ActionButton from "components/ActionButton";
 
-export default ({ message = {}, user = {}, isLiked = false }) => {
+export default ({ message = {}, user = {}, isLiked, noLikeCount }) => {
   const likeMessage = useLikeMessage();
   const toast = useToast();
 
@@ -99,7 +99,7 @@ export default ({ message = {}, user = {}, isLiked = false }) => {
             }
           />
 
-          <Text>{message?.likes?.length}</Text>
+          {!noLikeCount && <Text>{message?.likes?.length}</Text>}
         </Flex>
       </Flex>
     </Flex>

@@ -4,5 +4,3 @@ const Like = require("../models/like");
 
 Message.belongsTo(User, { as: "user" });
 User.hasMany(Message, { as: "messages" });
-
-Message.hasMany(Like, { as: "likes" });

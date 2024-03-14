@@ -9,8 +9,10 @@ const GET_MESSAGES = async (filters) => {
   return data;
 };
 
-const GET_LIKED_MESSAGES = async () => {
-  const { data } = await api.get(BASE_PATH + "/likedMessages");
+const GET_LIKED_MESSAGES = async (filters) => {
+  const { data } = await api.get(BASE_PATH + "/likedMessages", {
+    params: filters,
+  });
   return data;
 };
 

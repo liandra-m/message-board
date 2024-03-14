@@ -42,6 +42,7 @@ export default () => {
           isLiked={message?.likes?.find((l) => {
             if (l?.userId === user?.id) return true;
           })}
+          noLikeCount
         />
       ))}
     </Flex>

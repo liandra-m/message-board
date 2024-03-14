@@ -4,6 +4,7 @@ const User = require("../database/models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Message = require("../database/models/message");
+const Like = require("../database/models/like");
 
 const jwtKey = process.env.JWT_SECRET_KEY;
 
@@ -73,11 +74,17 @@ router.post("/me", async (req, res) => {
     const decodedToken = jwt.decode(token);
 
     const user = await User.findByPk(decodedToken?.id, {
-      include: {
-        model: Message,
-        as: "messages",
-        attributes: { exclude: "password" },
-      },
+      include: [
+        {
+          model: Message,
+          as: "messages",
+          attributes: { exclude: "password" },
+        },
+        {
+          model: Like,
+          attributes: ["messageId"],
+        },
+      ],
     });
 
     return res.status(200).send(user);

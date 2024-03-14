@@ -66,7 +66,11 @@ export default () => {
               </Flex>
               <Flex direction="column">
                 <Text color="gray.300">Posted</Text>
-                <Text>{user?.messages?.length} messages</Text>
+                <Text>{user?.messages?.length || 0} messages</Text>
+              </Flex>
+              <Flex direction="column">
+                <Text color="gray.300">Liked</Text>
+                <Text>{user?.likes?.length || 0} messages</Text>
               </Flex>
             </VStack>
           </Flex>

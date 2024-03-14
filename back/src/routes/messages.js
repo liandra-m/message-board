@@ -37,7 +37,7 @@ router.get(BASE_PATH, async (req, res) => {
         [sequelize.fn("COUNT", sequelize.col("likes.messageId")), "like_count"],
       ],
       include: includeUserAndLikes,
-      group: ["id", "likes.userId", "likes.createdAt"],
+      group: ["id", "likes.userId", "likes.createdAt", "likes.id"],
       order: [
         ["createdAt", "DESC"],
         ["updatedAt", "DESC"],
@@ -76,11 +76,12 @@ router.get(`${BASE_PATH}/likedMessages`, async (req, res) => {
         {
           model: Like,
           as: "likes",
-          where: { userId: 3 }, // Filter likes by userId = 3
-          required: true, // Use inner join to get only the liked messages
+          attributes: ["messageId", "userId"],
+          where: { userId: req?.query?.userId },
+          required: true,
         },
       ],
-      group: ["id", "likes.userId", "likes.createdAt"],
+      group: ["id", "likes.userId"],
       order: [
         ["createdAt", "DESC"],
         ["updatedAt", "DESC"],
@@ -89,7 +90,7 @@ router.get(`${BASE_PATH}/likedMessages`, async (req, res) => {
 
     res.status(200).send(likedMessages);
   } catch (error) {
-    res.status(500).send("Unable to retrieve messages" + error);
+    res.status(500).send("Unable to retrieve messages");
   }
 });
 

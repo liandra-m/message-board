@@ -9,6 +9,11 @@ const GET_MESSAGES = async (filters) => {
   return data;
 };
 
+const GET_LIKED_MESSAGES = async () => {
+  const { data } = await api.get(BASE_PATH + "/likedMessages");
+  return data;
+};
+
 const CREATE_MESSAGE = async (payload) => {
   console.log(payload);
   const { data } = await api.post(BASE_PATH, payload);
@@ -32,6 +37,7 @@ const LIKE_MESSAGE = async (id) => {
 
 export {
   GET_MESSAGES,
+  GET_LIKED_MESSAGES,
   CREATE_MESSAGE,
   EDIT_MESSAGE,
   DELETE_MESSAGE,

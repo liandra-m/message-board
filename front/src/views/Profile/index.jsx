@@ -1,4 +1,12 @@
-import { Avatar, Box, Center, Flex, Spinner, Text, VStack } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Center,
+  Flex,
+  Spinner,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import MessageCard from "components/MessageCard";
 
 import NavBar from "components/NavBar";
@@ -8,36 +16,29 @@ import { useAuth } from "hooks/auth";
 import { useGetMessages } from "hooks/messages";
 import { useMessages } from "hooks/messages";
 import { useEffect } from "react";
+import ProfileTabs from "./ProfileTabs";
 
 export default () => {
   const { me: user, loading: loadingUser, failed: failedUser } = useAuth();
-  const [
-    getMessages,
-    { messages, loading: loadingMessages, failed: failedMessages },
-  ] = useGetMessages();
-
-  const handleMessages = async () => {
-    await getMessages({ userId: user?.id });
-  };
-
-  useEffect(() => {
-    handleMessages();
-  }, [user]);
 
   return (
     <Flex direction="column" h="100vh">
       <NavBar />
-      {loadingUser || loadingMessages ? 
+      {loadingUser ? (
         <Center h="100%">
-          <Spinner thickness={6} color="blue.500" w="100px" h="100px"/>
+          <Spinner thickness={6} color="blue.500" w="100px" h="100px" />
         </Center>
-      : (
-        <Flex justify="space-around" padding="0 10%" bg="gray.100">
+      ) : (
+        <Flex
+          justify="space-around"
+          padding="0 10%"
+          bg="gray.100"
+          direction={{ base: "column", md: "row" }}
+        >
           <Flex
             background="blue.500"
-            minH="400px"
-            maxH="600px"
-            w="25%"
+            h="fit-content"
+            minW={{ base: "125px", sm: "250px", lg: "325px" }}
             m="1em 2.5em"
             direction="column"
             align="center"
@@ -65,22 +66,11 @@ export default () => {
               </Flex>
               <Flex direction="column">
                 <Text color="gray.300">Posted</Text>
-                <Text>{messages?.length} messages</Text>
+                <Text>{user?.messages?.length} messages</Text>
               </Flex>
             </VStack>
           </Flex>
-          <Flex
-            w="75%"
-            direction="column"
-          >
-            {messages?.map((message) => (
-              <MessageCard
-                message={message}
-                user={{ id: user?.id, name: user?.name }}
-                profile
-              />
-            ))}
-          </Flex>
+          <ProfileTabs></ProfileTabs>
         </Flex>
       )}
     </Flex>

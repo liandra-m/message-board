@@ -21,10 +21,10 @@ import {
   Box,
 } from "@chakra-ui/react";
 
-import { EditIcon } from "@chakra-ui/icons";
-
 import { messageSchema } from "views/Messages/validationRules";
 import { useEditMessage } from "hooks/messages";
+import { FaEdit } from "react-icons/fa";
+import ActionButton from "components/ActionButton";
 
 export default ({ message }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -67,16 +67,11 @@ export default ({ message }) => {
 
   return (
     <>
-      <Box
-        padding=".5em"
-        borderRadius="50%"
-        transition=".25s ease"
-        _hover={{ cursor: "pointer", color: "yellow.400", bg: "blue.700" }}
+      <ActionButton
+        icon={<FaEdit size={22} />}
+        hoverColor="blue.500"
         onClick={onOpen}
-      >
-        <EditIcon minW="25px" minH="25px" />
-      </Box>
-
+      />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <form onSubmit={handleSubmit(onSubmit)}>

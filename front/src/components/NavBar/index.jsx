@@ -2,15 +2,17 @@ import {
   Box,
   Button,
   Flex,
+  Image,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
   Text,
+  useMediaQuery,
   useToast,
 } from "@chakra-ui/react";
-import { FaUserAlt } from "react-icons/fa";
+import { FaPaperPlane, FaUserAlt } from "react-icons/fa";
 
 import { useNavigate } from "react-router";
 
@@ -25,6 +27,7 @@ export default () => {
   const logout = useLogout();
   const navigate = useNavigate();
   const toast = useToast();
+  const [isSmallerThanBreakpoint] = useMediaQuery("min-width: 512px");
 
   const handleLogout = async () => {
     logout({
@@ -50,12 +53,27 @@ export default () => {
   };
 
   return (
-    <Box w="100%" minH="50px" bg="blue.500" padding="1em" color="white">
-      <Flex align="center" justify="space-between" padding="0 10%">
+    <Box
+      w="100%"
+      h="90px"
+      bg="blue.500"
+      padding="1em"
+      color="white"
+      justify="center"
+      align="center"
+    >
+      <Flex
+        align="center"
+        justify="space-between"
+        w={{ base: "90%", md: "75%" }}
+      >
         <NavLink to="/messages" _hover={{ cursor: "pointer" }}>
-          <Text fontWeight="bold" fontSize="24px">
-            Message Board
-          </Text>
+          <Flex align="center" gap="16px">
+            <FaPaperPlane size={32} />
+            <Text fontWeight="bold" fontSize={{ base: "20px", sm: "24px" }}>
+              Message Board
+            </Text>
+          </Flex>
         </NavLink>
         <Menu offset={[-150, 7]}>
           <MenuButton rightIcon={<ChevronDownIcon />}>

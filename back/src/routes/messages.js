@@ -10,9 +10,54 @@ const BASE_PATH = "/messages";
 const EXCLUDE_ATTR = ["password", "email"];
 const jwtKey = process.env.JWT_SECRET_KEY;
 
+const includeUserAndLikes = [
+  {
+    model: User,
+    as: "user",
+    attributes: { exclude: EXCLUDE_ATTR },
+  },
+  {
+    model: Like,
+    as: "likes",
+    attributes: ["userId", "createdAt"],
+  },
+];
+
 router.get(BASE_PATH, async (req, res) => {
+  console.log(req.query);
   try {
     const messages = await Message.findAll({
+      attributes: [
+        "id",
+        "title",
+        "body",
+        "createdAt",
+        "updatedAt",
+        "userId",
+        [sequelize.fn("COUNT", sequelize.col("likes.messageId")), "like_count"],
+      ],
+      include: includeUserAndLikes,
+      group: ["id", "likes.userId", "likes.createdAt"],
+      order: [
+        ["createdAt", "DESC"],
+        ["updatedAt", "DESC"],
+      ],
+      where: req?.query || {},
+    });
+
+    res.status(200).send(messages);
+  } catch (error) {
+    res.status(500).send("Unable to retrieve messages");
+  }
+});
+
+router.get(`${BASE_PATH}/likedMessages`, async (req, res) => {
+  try {
+    const token = req.headers["authorization"]?.replace("Bearer ", "");
+    await jwt.verify(token, jwtKey);
+    const user = jwt.decode(token)?.id;
+
+    const likedMessages = await Message.findAll({
       attributes: [
         "id",
         "title",
@@ -31,7 +76,8 @@ router.get(BASE_PATH, async (req, res) => {
         {
           model: Like,
           as: "likes",
-          attributes: ["userId", "createdAt"],
+          where: { userId: 3 }, // Filter likes by userId = 3
+          required: true, // Use inner join to get only the liked messages
         },
       ],
       group: ["id", "likes.userId", "likes.createdAt"],
@@ -39,10 +85,9 @@ router.get(BASE_PATH, async (req, res) => {
         ["createdAt", "DESC"],
         ["updatedAt", "DESC"],
       ],
-      where: req?.query || {},
     });
 
-    res.status(200).send(messages);
+    res.status(200).send(likedMessages);
   } catch (error) {
     res.status(500).send("Unable to retrieve messages" + error);
   }
@@ -53,11 +98,7 @@ router.post(BASE_PATH, async (req, res) => {
     const newMessage = await Message.create(req.body);
 
     const message = await Message.findByPk(newMessage?.id, {
-      include: {
-        model: User,
-        as: "user",
-        attributes: { exclude: EXCLUDE_ATTR },
-      },
+      include: includeUserAndLikes,
     });
 
     res.status(201).send(message);
@@ -75,11 +116,7 @@ router.put(`${BASE_PATH}/:id`, async (req, res) => {
     });
 
     const message = await Message.findByPk(req?.params?.id, {
-      include: {
-        model: User,
-        as: "user",
-        attributes: { exclude: EXCLUDE_ATTR },
-      },
+      include: includeUserAndLikes,
     });
 
     res.status(200).send(message);

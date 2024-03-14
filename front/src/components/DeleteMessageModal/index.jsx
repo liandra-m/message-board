@@ -15,6 +15,8 @@ import {
 
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useDeleteMessage } from "hooks/messages";
+import ActionButton from "components/ActionButton";
+import { FaTrash, FaTrashAlt } from "react-icons/fa";
 
 export default ({ message }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,15 +50,11 @@ export default ({ message }) => {
 
   return (
     <>
-      <Box
-        padding=".5em"
-        borderRadius="50%"
-        transition=".25s ease"
-        _hover={{ cursor: "pointer", color: "red.400", bg: "blue.700" }}
+      <ActionButton
+        icon={<FaTrashAlt size={22} />}
+        hoverColor="red.400"
         onClick={onOpen}
-      >
-        <DeleteIcon minH="25px" minW="25px" />
-      </Box>
+      />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

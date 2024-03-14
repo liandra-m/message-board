@@ -14,12 +14,15 @@ import {
 } from "services/messages";
 
 import messageReducer from "./reducer";
+import { GET_LIKED_MESSAGES } from "services/messages";
 
 export const MessageContext = createContext();
 export const MessageDispatchContext = createContext();
 
 export const MessageProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(messageReducer, { messages: [] });
+  const [state, dispatch] = useReducer(messageReducer, {
+    messages: [],
+  });
 
   return (
     <MessageContext.Provider value={{ messages: state.messages }}>
@@ -71,6 +74,31 @@ export const useGetMessages = () => {
   };
 
   return [getMessages, { messages, failed, loading }];
+};
+
+export const useGetLikedMessages = () => {
+  const { messages } = useMessages();
+  const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
+
+  const getLikedMessages = async (filters) => {
+    try {
+      const data = await GET_LIKED_MESSAGES();
+
+      dispatch({
+        type: "LIST_MESSAGES",
+        payload: data,
+      });
+    } catch (error) {
+      setFailed(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return [getLikedMessages, { messages, failed, loading }];
 };
 
 export const useAddMessage = () => {

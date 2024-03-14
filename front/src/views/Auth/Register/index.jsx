@@ -64,7 +64,13 @@ export default () => {
   return (
     <Center align="center" justify="center" bg="blue.600" h="100vh">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack borderRadius="12px" bg="white" padding="5em" spacing="24px">
+        <VStack
+          borderRadius="12px"
+          bg="white"
+          padding={{ base: "2.5em", md: "5em" }}
+          spacing="24px"
+          m="1em"
+        >
           <FormControl isInvalid={errors?.name}>
             <FormLabel>Name</FormLabel>
             <Input

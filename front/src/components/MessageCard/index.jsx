@@ -1,4 +1,11 @@
-import { Text, Heading, Flex, Box, IconButton } from "@chakra-ui/react";
+import {
+  Text,
+  Heading,
+  Flex,
+  Box,
+  IconButton,
+  useToast,
+} from "@chakra-ui/react";
 
 import { getRelativeTime } from "functions/date";
 
@@ -12,6 +19,7 @@ import ActionButton from "components/ActionButton";
 
 export default ({ message = {}, user = {}, isLiked = false }) => {
   const likeMessage = useLikeMessage();
+  const toast = useToast();
 
   const navigate = useNavigate();
 
@@ -77,7 +85,15 @@ export default ({ message = {}, user = {}, isLiked = false }) => {
             onClick={() =>
               likeMessage(message?.id, {
                 onError: (error) => {
-                  if (error?.response?.status === 401) navigate("/login");
+                  if (error?.response?.status === 401) {
+                    toast({
+                      title: "Please login to continue.",
+                      status: "info",
+                      duration: 5000,
+                      isClosable: true,
+                    });
+                    navigate("/login");
+                  }
                 },
               })
             }

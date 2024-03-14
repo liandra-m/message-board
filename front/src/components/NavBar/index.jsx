@@ -8,6 +8,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
   Text,
   useMediaQuery,
   useToast,
@@ -89,30 +90,34 @@ export default () => {
             </Flex>
           </MenuButton>
           <MenuList color="gray.700">
-            {!loading && !failed && me ? (
-              <>
-                <Text ml="12px">Signed as {me?.name}</Text>
-                <MenuDivider />
+            {!loading ? (
+              !failed && me ? (
+                <>
+                  <Text ml="12px">Signed as {me?.name}</Text>
+                  <MenuDivider />
+                  <MenuItem
+                    onClick={() => navigate("/profile")}
+                    _hover={{ cursor: "pointer" }}
+                  >
+                    Profile
+                  </MenuItem>
+                  <MenuItem
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => handleLogout()}
+                  >
+                    Logout
+                  </MenuItem>
+                </>
+              ) : (
                 <MenuItem
-                  onClick={() => navigate("/profile")}
                   _hover={{ cursor: "pointer" }}
+                  onClick={() => navigate("/login")}
                 >
-                  Profile
+                  Login
                 </MenuItem>
-                <MenuItem
-                  _hover={{ cursor: "pointer" }}
-                  onClick={() => handleLogout()}
-                >
-                  Logout
-                </MenuItem>
-              </>
+              )
             ) : (
-              <MenuItem
-                _hover={{ cursor: "pointer" }}
-                onClick={() => navigate("/login")}
-              >
-                Login
-              </MenuItem>
+              <Spinner />
             )}
           </MenuList>
         </Menu>

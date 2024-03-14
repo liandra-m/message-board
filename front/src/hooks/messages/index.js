@@ -85,7 +85,7 @@ export const useGetLikedMessages = () => {
 
   const getLikedMessages = async (filters) => {
     try {
-      const data = await GET_LIKED_MESSAGES();
+      const data = await GET_LIKED_MESSAGES(filters);
 
       dispatch({
         type: "LIST_MESSAGES",
